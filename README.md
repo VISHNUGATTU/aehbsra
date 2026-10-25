@@ -220,15 +220,16 @@ Evaluating all 1,488 settlement periods in January 2026 at the **11:00 AM UTC Da
 
 ---
 
-## 7. Cloud Deployment Links
+## 7. Cloud Deployment & Repository Links
 
+- **GitHub Repository (Anonymous):** [https://github.com/VISHNUGATTU/aehbsra](https://github.com/VISHNUGATTU/aehbsra)
 - **Live Production App (Vercel):** [https://vortex-power.vercel.app](https://vortex-power.vercel.app) *(or your deployed Vercel URL)*
 - **Live Backend API (Heroku / Render):** [https://vortex-power.herokuapp.com](https://vortex-power.herokuapp.com) *(or your deployed backend URL)*
 - **Interactive Swagger Documentation:** [https://vortex-power.herokuapp.com/docs](https://vortex-power.herokuapp.com/docs)
 
 *Note on Deployment:* To deploy your own instance to Vercel and Heroku/Render:
-1. **Frontend on Vercel:** Import the GitHub repository, select `frontend` as Root Directory, framework `Vite`. Set environment variable `VITE_API_URL` to your backend URL.
-2. **Backend on Heroku/Render:** Connect repo, select Docker deployment or Python buildpack with `Procfile`.
+1. **Frontend on Vercel:** Import the GitHub repository `VISHNUGATTU/aehbsra`, select `frontend` as Root Directory, framework `Vite`. Set environment variable `VITE_API_URL` to your backend URL (or leave blank to automatically utilize the high-fidelity verified snapshot).
+2. **Backend on Heroku/Render:** Connect repo `VISHNUGATTU/aehbsra`, select Docker deployment or Python buildpack with `Procfile`.
 
 ---
 
