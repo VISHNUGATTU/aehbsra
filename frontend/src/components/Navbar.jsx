@@ -63,11 +63,12 @@ export default function Navbar({
           }}>
             <div className="pulse-indicator"></div>
             <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>
-              Elexon BMRS Live: <strong style={{ color: '#FFFFFF' }}>January 2026</strong>
+              {dataHealth?.isSnapshot ? 'Elexon BMRS Verified Snapshot:' : 'Elexon BMRS Live API:'}{' '}
+              <strong style={{ color: '#FFFFFF' }}>January 2026</strong>
             </span>
             <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
-            <span style={{ fontSize: '11px', color: 'var(--accent-emerald)', fontWeight: 600 }}>
-              100% Complete (1,488 SPs)
+            <span style={{ fontSize: '11px', color: dataHealth?.isSnapshot ? 'var(--accent-cyan)' : 'var(--accent-emerald)', fontWeight: 600 }}>
+              {dataHealth?.isSnapshot ? '100% Complete (1,488 SPs)' : '100% Synchronized (1,488 SPs)'}
             </span>
           </div>
 
