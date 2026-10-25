@@ -1,126 +1,105 @@
-# 10-MINUTE UNLISTED YOUTUBE VIDEO RECORDING SCRIPT
+# 3 TO 4-MINUTE VIDEO DEMO SCRIPT
 
-> **Challenge:** UK Energy Utility Day-Ahead Renewable Procurement & Forecast Evaluation  
-> **Format:** 2 Parts (Part 1: Client Pitch <= 5 mins, Part 2: Tech Lead Review <= 5 mins)  
-> **Total Length:** <= 10 Minutes  
-> **Role:** Lead Product Developer & Quantitative Energy Systems Engineer  
-
----
-
-## Preparations Before Recording
-1. Start the application locally:
-   - Terminal 1: `python backend/run_backend.py --port 8000`
-   - Terminal 2: `cd frontend && npm run dev`
-2. Open your browser in full screen at `http://localhost:5173`.
-3. Have your terminal open in another window ready to run `python scripts/run_tests.py`.
+> **Total Video Duration:** 3 to 4 Minutes  
+> **Format:** Spoken script with exact on-screen clicks and actions inside `(parentheses)`.  
+> **Target Audience:** Energy Utility Commercial Director, Procurement Desk & Technical Reviewers.  
+> **Preparation:** Open `http://localhost:5173` (or live URL) in full screen. Have terminal ready in background with `python scripts/run_tests.py`.
 
 ---
 
-## PART 1: Client Presentation Pitch (0:00 - 5:00)
-*Audience:* Commercial Director, Head of Power Procurement, and Trading Desk at a UK Energy Utility.  
-*Goal:* Impress them with domain mastery, clear software usability, and quantified commercial ROI.
+### [0:00 - 0:40] Introduction & The Commercial Challenge
 
-### [0:00 - 1:00] Slide 1 / Opening Problem Statement
-- **What to show on screen:** Click the **"Client Pitch"** button in the navbar to display Slide 1 ("Executive Summary: The UK Day-Ahead Renewable Challenge").
-- **What to say:**
-  > "Good morning, team. Today, I am proud to present **VORTEX**, the customized Day-Ahead renewable generation and procurement risk portal we developed for your wholesale power purchase desk.
-  > As an energy utility in Great Britain, your mandate is simple yet high-stakes: you must buy enough electricity from the wholesale Day-Ahead market (EPEX SPOT GB or Nord Pool) to satisfy your consumers' power demand in every single 30-minute settlement period tomorrow.
-  > To know how much flexible thermal power or CCGT contracts you need to procure, you must know how much renewable wind power will be delivered. But power purchase decisions must be submitted before **11:00 AM on Day D-1**.
-  > If you naively trust raw weather forecasts and wind drops out, you are left short in real-time balancing, forced to buy power from National Grid ESO at punitive System Buy Prices (SBP) that frequently spike past £150 to £300/MWh. 
-  > VORTEX was engineered specifically to solve this problem."
+(Screen shows the main dashboard at `http://localhost:5173`. Point cursor to the header title: "VORTEX POWER - UK Day-Ahead Energy Desk" and the live Elexon January 2026 indicator.)
 
-### [1:00 - 2:30] Live Trading Workspace Demo
-- **What to show on screen:** Close the pitch modal. You are now on **Tab 1: Day-Ahead Procurement Workspace**.
-- **Actions to take:**
-  1. Hover over the KPI cards: Show Mean Actual (11,581 MW), Mean DA Forecast (13,421 MW), and Forecast Directional Bias (+1,840 MW).
-  2. Switch the Decision Gate Closure selector from **11:00 UTC D-1** to **17:00 UTC D-1** and back to show live re-calculation.
-  3. Click the date preset **"Week 1 (Storm Surge)"** to zoom into the first week of January 2026.
-  4. Hover over the co-plotted Recharts chart showing Actuals (Green), Forecast (Cyan), and Residual Thermal Demand Needed (Amber).
-- **What to say:**
-  > "Let's dive right into your trading workspace. Right now, we are looking at real, national-level data from Elexon BMRS across January 2026.
-  > Notice this top selector: **Decision Gate Closure**. A major flaw in common analytics tools is look-ahead bias—evaluating forecasts using data that was published *after* the auction closed. In VORTEX, selecting '11:00 UTC D-1' filters the WINDFOR stream to isolate *strictly* the latest forecast your traders had on their screens when submitting binding orders.
-  > Immediately, the data uncovers an eye-opening commercial insight: throughout January 2026, the national wind forecast systematically over-predicted wind by an average of **+1,840 MW** across 71% of hours!
-  > Look at the Amber shaded area below the wind curve: that is your **Residual Thermal Procurement Need**—the exact volume of thermal peaker or wholesale power you must contract to prevent blackouts or severe balancing cashout fines."
+"Hello everyone. Today I'm presenting **VORTEX**, a specialized Day-Ahead renewable forecast evaluation and thermal power procurement risk platform built for UK energy utility trading desks.
 
-### [2:30 - 3:45] Quantitative Forecast Accuracy Lab
-- **What to show on screen:** Click on **"2. Quantitative Forecast Accuracy Lab"** tab.
-- **Actions to take:**
-  1. Point out the ISO metric cards: MAE (2,122.8 MW), RMSE (2,616.7 MW), WAPE (18.33%).
-  2. Scroll to the **Empirical Quantile Error Distribution (P10 / P50 / P90)**.
-  3. Hover over the Histogram and Diurnal Settlement Period profile.
-- **What to say:**
-  > "Requirement number two was to evaluate forecast accuracy quantitatively so your desk can trade with a mathematical edge. Welcome to the **Forecast Accuracy Lab**.
-  > Standard percentage metrics like MAPE break down on wind data because wind generation often nears zero, creating meaningless mathematical infinities. That is why we compute **WAPE (Weighted Absolute Percentage Error)**: at 18.33%, it gives your risk committee an honest, volume-weighted accuracy metric.
-  > More importantly for your traders, look at our **Empirical Quantile Distribution**:
-  > - Our **P50 median error is +1,640 MW**. This proves the forecast has a structural optimistic bias that must be de-biased.
-  > - Our **P90 tail risk is +4,312 MW**. That means in 10% of trading hours, wind was over-estimated by more than 4.3 Gigawatts! This is where energy utilities lose millions overnight in the Balancing Mechanism."
+As a UK power purchaser, your commercial challenge is critical: you must buy wholesale power on EPEX SPOT or Nord Pool before the **11:00 AM auction gate closure on Day D-1** to cover tomorrow's consumer demand. 
 
-### [3:45 - 5:00] Trader Decision Simulator & Commercial ROI
-- **What to show on screen:** Click on **"3. Trader Decision & Hedge Simulator"** tab.
-- **Actions to take:**
-  1. Select delivery date **January 15, 2026**.
-  2. Toggle from **1. Naive Strategy (0 MW Buffer)** to **3. P90 Conservative (+3,500 MW Buffer)**.
-  3. Point out the Net Commercial Savings metric card (£) and the reduction in short imbalance periods.
-- **What to say:**
-  > "Now, how does a trader translate this data into action at 10:45 AM tomorrow? That's what our **Procurement Simulator** does.
-  > Under the **Naive Strategy**, you procure strictly `Demand minus Wind Forecast`. Look at the real-time imbalance bars: massive red bars, meaning you are short of power across most settlement periods, paying £115/MWh cashout penalties.
-  > Now watch what happens when I switch to our **P90 Conservative Hedge Strategy**:
-  > We deduct a statistical safety buffer of 3,500 MW from the wind forecast. The red shortage bars virtually vanish! The utility contracts slightly more wholesale power Day-Ahead at £78/MWh, completely eliminating punitive £115/MWh cashout penalties.
-  > On this single day alone, the net commercial savings exceed **£180,000**, with over 20 short settlement periods avoided. Over the full winter month of January 2026, this decision support tool delivers **over £1.2 million in avoided imbalance liability**.
-  > This completes our pilot overview. We look forward to rolling VORTEX onto your trading desks."
+To calculate how much flexible thermal power you need to contract, you rely on national wind forecasts. But if the forecast over-predicts and actual wind drops out, you are caught short in real-time balancing—forced to buy emergency power from National Grid ESO at punitive System Buy Prices that spike beyond £115 to £300 per Megawatt-hour. 
+
+VORTEX was engineered to give trading desks the mathematical tools to eliminate this risk."
 
 ---
 
-## PART 2: Internal Technical Lead Review (5:00 - 10:00)
-*Audience:* Internal Technical Lead / Engineering Manager reviewing the architecture and codebase.  
-*Goal:* Demonstrate robust software architecture, algorithmic rigor, data integrity, and engineering maturity.
+### [0:40 - 1:40] Tab 1: Day-Ahead Procurement Workspace
 
-### [5:00 - 6:15] System Architecture & Data Lineage
-- **What to show on screen:** Click the **"Tech Lead Review"** button in the navbar.
-- **Actions to take:**
-  1. Show the System Architecture tab and the 4-tier pipeline diagram.
-  2. Briefly show the directory structure in VS Code or on screen.
-- **What to say:**
-  > "Hi team. For Part 2, I'll walk through the architectural design, algorithmic implementation, and software engineering practices behind VORTEX.
-  > We chose a decoupled modern stack: **React 19 with Vite** on the frontend, and a high-performance **Python 3.12 FastAPI** service on the backend.
-  > Our data pipeline ingests two official National Grid / Elexon BMRS streaming datasets:
-  > 1. `FUELHH/stream` filtered for `fuelType == 'WIND'`—giving us actual generation at 30-minute settlement period resolution.
-  > 2. `WINDFOR/stream`—giving us national wind forecasts with both target `startTime` and model `publishTime`.
-  > To ensure high availability and prevent network failure from crashing trading operations, our `DataPipeline` module caches validated January 2026 streams locally in `backend/data/cache/`. This yields instantaneous, sub-30ms API response times while still providing a `/api/refresh-data` hook for live streaming updates."
+(Click on **"1. Day-Ahead Procurement Workspace"** tab. Point cursor to the 5 top KPI cards: Actual Wind 11,581 MW, Day-Ahead Forecast 13,421 MW, Systematic Bias +1,840 MW.)
 
-### [6:15 - 7:30] Look-Ahead Bias Prevention & Day-Ahead Engine
-- **What to show on screen:** Switch to the **"Look-Ahead Bias Prevention"** tab inside the Tech Lead modal, or open `backend/app/day_ahead_engine.py` in your code editor.
-- **What to say:**
-  > "The most critical architectural requirement in energy trading applications is eliminating **look-ahead bias**.
-  > In `backend/app/day_ahead_engine.py`, we implement strict gate closure filtering. For any delivery day $D$, the user specifies a gate closure hour $H_{\text{gate}}$—defaulting to 11:00 AM UTC on Day $D-1$.
-  > We compute the cutoff: `GateClosure(D) = Timestamp(D - 1, hour=11, minute=0, second=0, tz='UTC')`.
-  > We then filter all forecasts for `publishTime <= GateClosure(D)` and select the latest publication via `latest_da = valid.sort_values('publishTime').iloc[-1]`.
-  > In addition, we align the 24 hourly wholesale forecast periods with the 48 half-hourly settlement periods (`SP 1` to `SP 48`) of the Balancing Mechanism, ensuring both contract types can be evaluated without any timezone-naive bugs or timestamp misalignments."
+"Here in the primary Day-Ahead Workspace, we are analyzing official Elexon BMRS streaming data across all 1,488 settlement periods of January 2026.
 
-### [7:30 - 8:45] Quantitative Analytics & Vectorized Simulation
-- **What to show on screen:** Switch to the **"Mathematical Formulation"** tab in the modal, or open `backend/app/metrics_engine.py` and `simulator_engine.py`.
-- **What to say:**
-  > "Turning to the analytics layer in `metrics_engine.py`:
-  > All metrics are fully vectorized using NumPy and SciPy. We compute:
-  > - **MAE and RMSE**: Mathematically, RMSE is $2,616.7\text{ MW}$, which is strictly greater than the MAE of $2,122.8\text{ MW}$, confirming expected Gaussian distribution properties with heavy-tail penalties.
-  > - **WAPE (Weighted Absolute Percentage Error)**: Rather than MAPE, which suffers from division by near-zero wind generation, WAPE computes $\frac{\sum |e_i|}{\sum A_i} \times 100 = 18.33\%$.
-  > - **Empirical Quantiles**: Computed non-parametrically across the 744 hours, giving us exact P10, P50, and P90 risk bounds.
-  > - **Diurnal Profiles & Ramp Rate Errors**: Grouping by hour of the day and computing generation differentials ($A_t - A_{t-1}$) to evaluate whether weather models accurately predicted rapid wind ramps.
-  > In `simulator_engine.py`, the financial balance calculation models exact UK cashout settlement: half-hourly energy (MWh) is computed as $\text{MW} \times 0.5\text{ hours}$, pricing short imbalances at the System Buy Price and surplus power at the System Sell Price."
+Notice our **Decision Gate Closure selector** set to **11:00 UTC D-1**. A common flaw in renewable analytics is look-ahead bias—evaluating forecasts using weather runs published after the market cleared. VORTEX strictly filters the forecast stream to isolate only the exact data your traders physically had when bidding."
 
-### [8:45 - 10:00] Testing, Containerization & Production Deployment
-- **What to show on screen:**
-  1. Switch to the **"Testing & Quality Assurance"** tab in the modal.
-  2. Switch to your terminal and execute: `python scripts/run_tests.py`.
-  3. Show the output: `8 passed in 6.13s | ALL TESTS PASSED`.
-  4. Briefly show `Dockerfile` and `docker-compose.yml`.
-- **What to say:**
-  > "Finally, let's review software reliability and production deployment.
-  > In `backend/tests/test_backend.py`, we built an 8-stage automated test suite using `pytest` and `TestClient`:
-  > It validates data pipeline completeness (verifying all 1,488 SPs), confirms that lead-time error monotonically decreases as gate closure approaches delivery, verifies mathematical properties like RMSE $\ge$ MAE, and tests all REST API endpoints.
-  > As you can see in the terminal, all 8 test suites pass cleanly with zero warnings.
-  > For deployment, the repository includes:
-  > - A multi-stage `Dockerfile` and `docker-compose.yml` for 1-command startup.
-  > - A root unified container for Heroku and Render deployment.
-  > - And a `vercel.json` configuration for static edge deployment.
-  > Per assignment instructions, this project has been initialized in a clean anonymous Git repository ready for submission. Thank you, and I look forward to your review feedback."
+(Click the date preset button **"Week 1 (Storm)"**. Hover cursor across the co-plotted time series chart.)
+
+"This reveals an immediate, high-value commercial insight: throughout January 2026, the national wind forecast systematically over-predicted generation by an average of **+1,840 MW** across **71% of all trading hours**. 
+
+In the chart, the **Green line** is actual delivered wind generation, the **Blue line** is the Day-Ahead auction forecast, the **Yellow dashed line** shows the intraday correction, and the **Orange shaded area** calculates your exact **Residual Thermal Procurement Need**—the precise gap of power you must purchase to prevent blackouts or cashout penalties."
+
+(Click the **"Export CSV"** button in the control bar to show instantaneous data export.)
+
+"Traders can export this aligned dataset to CSV with one click for downstream ETRM modeling."
+
+---
+
+### [1:40 - 2:30] Tab 2: Quantitative Forecast Accuracy Lab
+
+(Click on **"2. Quantitative Forecast Accuracy Lab"** tab. Hover over the metric cards: MAE 2,123 MW, RMSE 2,617 MW, WAPE 18.3%.)
+
+"Next, the **Forecast Accuracy Lab** evaluates the forecast quantitatively according to international energy standards.
+
+Standard percentage metrics like MAPE fail on wind data because generation frequently nears zero, producing division-by-zero errors. We compute **WAPE (Weighted Absolute Percentage Error)**: at **18.33%**, it provides an uncorrupted volume-weighted benchmark for your risk committee."
+
+(Scroll down to the **Empirical Error Quantiles** row: P05, P10 in green, P25 in blue, P50 in yellow, P75 in orange, P90 in red.)
+
+"More importantly for traders, look at our **Empirical Error Quantiles**:
+- The **P50 median error is +1,640 MW**, mathematically proving a structural over-forecasting bias.
+- The **P90 tail risk is +4,312 MW**. That means in 10% of hours, wind dropped more than 4.3 Gigawatts below forecast. That severe tail risk is where utilities suffer massive balancing losses."
+
+(Briefly hover over the **Error Distribution Histogram** and **Lead-Time Accuracy Decay Table**.)
+
+"Our lead-time decay table verifies that while volumetric MAE improves as delivery approaches, the positive bias remains persistent—proving that traders must hedge Day-Ahead rather than gambling on intraday corrections."
+
+---
+
+### [2:30 - 3:25] Tab 3: Trader Decision & Hedge Simulator
+
+(Click on **"3. Trader Decision & Hedge Simulator"** tab. Delivery date is set to January 15, 2026.)
+
+"Now, how does a trader turn this quantitative data into cash savings tomorrow morning? That is the role of our **Procurement Simulator**."
+
+(Click on **"1. Naive Strategy (0 MW Buffer)"** card with red border. Scroll to the Imbalance Bar Chart showing large red bars.)
+
+"Under the default **Naive Strategy**, the trader procures strictly `Demand minus Wind Forecast`. Look at the real-time imbalance chart below: heavy red bars across the day indicate massive unhedged short positions settling at the penalty System Buy Price of £115/MWh."
+
+(Click on **"3. P90 Conservative (+3,500 MW Buffer)"** card with green border.)
+
+"Now watch what happens when we switch to our **P90 Conservative Strategy**:
+We deduct a quantified 3,500 MW risk buffer from the wind forecast. The red shortage bars disappear entirely! By securing slightly more wholesale thermal power Day-Ahead at £78/MWh, we completely bypass the £115/MWh penalty cashout spread."
+
+(Point cursor to the KPI cards: Net Commercial Savings £182,450 and 22 Short Periods Avoided.)
+
+"On this single day alone, net commercial savings exceed **£182,000**, with 22 short settlement periods eliminated. Over the full winter month of January 2026, this delivers **over £1.2 million in avoided cashout penalties**."
+
+---
+
+### [3:25 - 3:55] Production Architecture & 24/7 Keep-Alive
+
+(Click on **"Tech Lead Review (5m)"** button in the header. Show the clean architecture modal diagram.)
+
+"Architecturally, VORTEX is built with a decoupled modern stack: **React 19 with Vite** on the frontend and a vectorized **Python FastAPI** backend running on Python 3.12."
+
+(Minimize modal or switch to open terminal window and run: `python scripts/run_tests.py`.)
+
+"Our entire data pipeline and mathematical engine is backed by an automated 8-stage test suite validating data completeness across all 1,488 settlement periods, quantile integrity, and REST endpoints—passing 100% cleanly in seconds."
+
+(Show terminal output displaying `8 passed in 9.75s | ALL TESTS PASSED`.)
+
+"The application is containerized with Docker, deployed live on Render and Vercel, and configured with an automated **24/7 GitHub Actions keep-alive cron job** that pings the health endpoint every 10 minutes to eliminate free-tier cold boot delays."
+
+---
+
+### [3:55 - 4:05] Closing Wrap-up
+
+(Switch back to the browser displaying the VORTEX dashboard.)
+
+"In summary: VORTEX transforms volatile weather forecasts into de-biased, actionable, and mathematically hedged power procurement decisions. Thank you, and I look forward to your questions."
