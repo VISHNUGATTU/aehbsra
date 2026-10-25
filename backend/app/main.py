@@ -12,8 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
+import asyncio
 from .data_pipeline import pipeline
 from .api.routes import router
+from .keep_alive import keep_alive_daemon
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,7 +32,17 @@ async def lifespan(app: FastAPI):
         logger.info(f"Data Pipeline Initialized: {health['status']}, Actuals: {health['actuals']['totalRecords']}, Forecasts: {health['forecasts']['totalPublications']}")
     except Exception as e:
         logger.error(f"Error during initialization: {e}", exc_info=True)
+
+    keep_alive_task = None
+    # Enable keep-alive ping daemon on Render or when explicitly configured
+    if os.environ.get("RENDER") or os.environ.get("RENDER_EXTERNAL_URL") or os.environ.get("ENABLE_KEEP_ALIVE") == "true":
+        keep_alive_task = asyncio.create_task(keep_alive_daemon(interval_seconds=600))
+        logger.info("Launched background keep-alive ping daemon for 24/7 warm cloud uptime.")
+
     yield
+
+    if keep_alive_task and not keep_alive_task.done():
+        keep_alive_task.cancel()
     logger.info("Shutting down forecasting engine.")
 
 app = FastAPI(

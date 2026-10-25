@@ -14,3 +14,7 @@ services:
         value: production
       - key: LOG_LEVEL
         value: INFO
+      - key: ENABLE_KEEP_ALIVE
+        value: "true"
+      - key: KEEP_ALIVE_URL
+        value: "https://vortex-power.onrender.com"
