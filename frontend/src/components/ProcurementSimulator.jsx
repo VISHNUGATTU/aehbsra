@@ -8,7 +8,6 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
   ReferenceLine
 } from 'recharts';
 import { 
@@ -16,16 +15,9 @@ import {
   Coins, 
   AlertOctagon, 
   Flame, 
-  Play, 
   Calendar, 
-  Sliders, 
-  DollarSign,
-  TrendingDown,
-  Layers,
   Download,
-  Search,
-  Filter,
-  CheckCircle2
+  Search
 } from 'lucide-react';
 import MetricCard from './MetricCard';
 import { executeSimulation } from '../services/api';
@@ -115,23 +107,23 @@ export default function ProcurementSimulator({ gateHour }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Simulator Control Header */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
+      <div className="glass-panel" style={{ padding: '24px', background: '#FFFFFF' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
                 Day-Ahead Thermal Power Procurement & Risk Hedging Simulator
               </h2>
               <span className="badge-status badge-green">Decision Support Engine</span>
             </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-dim)', margin: 0, marginTop: '4px' }}>
+            <p style={{ fontSize: '12.5px', color: 'var(--text-dim)', margin: 0, marginTop: '4px' }}>
               Calculate residual power needed beyond wind, applying quantified risk buffers to avoid punitive System Buy Price penalties
             </p>
           </div>
 
           {/* Quick Date Selector */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Calendar size={15} /> Delivery Date:
             </span>
             <select
@@ -153,91 +145,99 @@ export default function ProcurementSimulator({ gateHour }) {
           </div>
         </div>
 
-        {/* Strategy Selector Pills */}
+        {/* Strategy Selector Pills (Strict 5 Colors) */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', marginBottom: '20px' }}>
           
+          {/* Strategy 1: Naive (Red) */}
           <div 
             onClick={() => setStrategy('naive')}
             style={{
               padding: '16px',
               borderRadius: '10px',
-              background: strategy === 'naive' ? 'rgba(244, 63, 94, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: `1px solid ${strategy === 'naive' ? 'rgba(244, 63, 94, 0.5)' : 'rgba(255, 255, 255, 0.06)'}`,
+              background: strategy === 'naive' ? 'var(--red-soft)' : '#FFFFFF',
+              border: `2px solid ${strategy === 'naive' ? 'var(--red)' : 'var(--border-subtle)'}`,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.18s ease',
+              boxShadow: strategy === 'naive' ? '0 0 0 2px rgba(220, 38, 38, 0.15)' : 'none'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: strategy === 'naive' ? '#FB7185' : '#FFFFFF' }}>
-                1. Naive Strategy (0 MW Buffer)
+              <span style={{ fontSize: '13.5px', fontWeight: 700, color: strategy === 'naive' ? 'var(--red-dark)' : 'var(--text-main)' }}>
+                1. Naive (0 MW Buffer)
               </span>
-              <span className="badge-status badge-rose">High Risk</span>
+              <span className="badge-status badge-red">High Risk</span>
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
               Procures <code>Demand - WindForecast</code>. Highly vulnerable to January 2026 over-forecasting shortfalls.
             </p>
           </div>
 
+          {/* Strategy 2: Bias De-Risked (Yellow) */}
           <div 
             onClick={() => setStrategy('bias_adjusted')}
             style={{
               padding: '16px',
               borderRadius: '10px',
-              background: strategy === 'bias_adjusted' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: `1px solid ${strategy === 'bias_adjusted' ? 'rgba(245, 158, 11, 0.5)' : 'rgba(255, 255, 255, 0.06)'}`,
+              background: strategy === 'bias_adjusted' ? 'var(--yellow-soft)' : '#FFFFFF',
+              border: `2px solid ${strategy === 'bias_adjusted' ? 'var(--yellow)' : 'var(--border-subtle)'}`,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.18s ease',
+              boxShadow: strategy === 'bias_adjusted' ? '0 0 0 2px rgba(202, 138, 4, 0.15)' : 'none'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: strategy === 'bias_adjusted' ? '#FBBF24' : '#FFFFFF' }}>
+              <span style={{ fontSize: '13.5px', fontWeight: 700, color: strategy === 'bias_adjusted' ? 'var(--yellow-dark)' : 'var(--text-main)' }}>
                 2. Bias De-Risked (+1,840 MW)
               </span>
-              <span className="badge-status badge-amber">Balanced</span>
+              <span className="badge-status badge-yellow">Balanced</span>
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
               Deducts historical mean bias (+1,840 MW) from wind expectation to offset baseline model optimism.
             </p>
           </div>
 
+          {/* Strategy 3: P90 Conservative (Green) */}
           <div 
             onClick={() => setStrategy('p90_conservative')}
             style={{
               padding: '16px',
               borderRadius: '10px',
-              background: strategy === 'p90_conservative' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: `1px solid ${strategy === 'p90_conservative' ? 'rgba(16, 185, 129, 0.5)' : 'rgba(255, 255, 255, 0.06)'}`,
+              background: strategy === 'p90_conservative' ? 'var(--green-soft)' : '#FFFFFF',
+              border: `2px solid ${strategy === 'p90_conservative' ? 'var(--green)' : 'var(--border-subtle)'}`,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.18s ease',
+              boxShadow: strategy === 'p90_conservative' ? '0 0 0 2px rgba(22, 163, 74, 0.15)' : 'none'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: strategy === 'p90_conservative' ? '#34D399' : '#FFFFFF' }}>
+              <span style={{ fontSize: '13.5px', fontWeight: 700, color: strategy === 'p90_conservative' ? 'var(--green-dark)' : 'var(--text-main)' }}>
                 3. P90 Conservative (+3,500 MW)
               </span>
               <span className="badge-status badge-green">Recommended</span>
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
               Hedges 90% of worst-case wind drops. Protects utility against crippling Cashout SBP spikes.
             </p>
           </div>
 
+          {/* Strategy 4: Custom Risk Buffer (Blue) */}
           <div 
             onClick={() => setStrategy('custom_buffer')}
             style={{
               padding: '16px',
               borderRadius: '10px',
-              background: strategy === 'custom_buffer' ? 'rgba(6, 182, 212, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: `1px solid ${strategy === 'custom_buffer' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(255, 255, 255, 0.06)'}`,
+              background: strategy === 'custom_buffer' ? 'var(--blue-soft)' : '#FFFFFF',
+              border: `2px solid ${strategy === 'custom_buffer' ? 'var(--blue)' : 'var(--border-subtle)'}`,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.18s ease',
+              boxShadow: strategy === 'custom_buffer' ? '0 0 0 2px rgba(37, 99, 235, 0.15)' : 'none'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: strategy === 'custom_buffer' ? '#38BDF8' : '#FFFFFF' }}>
+              <span style={{ fontSize: '13.5px', fontWeight: 700, color: strategy === 'custom_buffer' ? 'var(--blue-dark)' : 'var(--text-main)' }}>
                 4. Custom Risk Buffer
               </span>
-              <span className="badge-status badge-cyan">Trader Defined</span>
+              <span className="badge-status badge-blue">Trader Defined</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
               <input
@@ -252,7 +252,7 @@ export default function ProcurementSimulator({ gateHour }) {
                 }}
                 style={{ flex: 1 }}
               />
-              <span className="mono-num" style={{ fontSize: '12px', fontWeight: 700, color: '#38BDF8' }}>
+              <span className="mono-num" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--blue-dark)' }}>
                 {customBufferMW} MW
               </span>
             </div>
@@ -267,41 +267,41 @@ export default function ProcurementSimulator({ gateHour }) {
           gap: '20px', 
           flexWrap: 'wrap', 
           padding: '12px 18px', 
-          background: 'rgba(15, 23, 42, 0.7)', 
+          background: 'var(--bg-sunken)', 
           borderRadius: '8px',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-          fontSize: '12px'
+          border: '1px solid var(--border-subtle)',
+          fontSize: '12.5px'
         }}>
-          <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Market Price Assumptions (£/MWh):</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-dim)' }}>Market Pricing Assumptions (£/MWh):</span>
           
           <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>Day-Ahead Wholesale:</span>
+            <span style={{ color: 'var(--blue-dark)', fontWeight: 600 }}>Day-Ahead Wholesale:</span>
             <input 
               type="number" 
               className="custom-input" 
-              style={{ width: '65px', padding: '4px 6px' }} 
+              style={{ width: '65px', padding: '4px 6px', fontSize: '12px' }} 
               value={daPrice} 
               onChange={(e) => setDaPrice(e.target.value)} 
             />
           </label>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: '#FB7185' }}>System Buy Price (Short Cashout):</span>
+            <span style={{ color: 'var(--red-dark)', fontWeight: 600 }}>System Buy Price (Short SBP):</span>
             <input 
               type="number" 
               className="custom-input" 
-              style={{ width: '65px', padding: '4px 6px' }} 
+              style={{ width: '65px', padding: '4px 6px', fontSize: '12px' }} 
               value={sbpPrice} 
               onChange={(e) => setSbpPrice(e.target.value)} 
             />
           </label>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: '#34D399' }}>System Sell Price (Spill):</span>
+            <span style={{ color: 'var(--green-dark)', fontWeight: 600 }}>System Sell Price (Surplus SSP):</span>
             <input 
               type="number" 
               className="custom-input" 
-              style={{ width: '65px', padding: '4px 6px' }} 
+              style={{ width: '65px', padding: '4px 6px', fontSize: '12px' }} 
               value={sspPrice} 
               onChange={(e) => setSspPrice(e.target.value)} 
             />
@@ -309,15 +309,11 @@ export default function ProcurementSimulator({ gateHour }) {
 
           <button 
             onClick={runSimulation}
+            className="btn-primary"
             style={{
               marginLeft: 'auto',
               padding: '6px 14px',
-              borderRadius: '6px',
-              background: 'var(--accent-cyan)',
-              color: '#000000',
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer'
+              fontSize: '12px'
             }}
           >
             Re-calculate
@@ -325,7 +321,7 @@ export default function ProcurementSimulator({ gateHour }) {
         </div>
       </div>
 
-      {/* Simulator Results KPI Cards */}
+      {/* Simulator Results KPI Cards (Strict 5 Colors) */}
       <div className="metrics-grid-4">
         
         <MetricCard
@@ -342,7 +338,7 @@ export default function ProcurementSimulator({ gateHour }) {
           value={risk.naiveShortPeriodsCount !== undefined ? `${risk.naiveShortPeriodsCount - (risk.hedgedShortPeriodsCount || 0)} SPs` : '---'}
           subtitle={`Down from ${risk.naiveShortPeriodsCount || 0} SPs to ${risk.hedgedShortPeriodsCount || 0} SPs`}
           badgeText="Risk Reduction"
-          badgeType="cyan"
+          badgeType="blue"
           icon={ShieldCheck}
         />
 
@@ -351,7 +347,7 @@ export default function ProcurementSimulator({ gateHour }) {
           value={risk.hedgedPeakShortageMW !== undefined ? `${risk.hedgedPeakShortageMW} MW` : '---'}
           subtitle={`Naive peak shortage: ${risk.naivePeakShortageMW || 0} MW`}
           badgeText="Peak Protection"
-          badgeType="amber"
+          badgeType="yellow"
           icon={AlertOctagon}
         />
 
@@ -368,31 +364,31 @@ export default function ProcurementSimulator({ gateHour }) {
       </div>
 
       {/* Settlement Period Procurement Timeline Chart */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="glass-panel" style={{ padding: '24px', background: '#FFFFFF' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', margin: 0 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
               Settlement Period Power Dispatch & Imbalance Profile ({targetDate})
             </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '3px' }}>
               Comparison across all 48 Half-Hourly Settlement Periods: Demand, Wind, and Additional Thermal Power Needed
             </p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '12px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#F8FAFC' }}>
-              <div style={{ width: '12px', height: '2px', backgroundColor: '#F8FAFC' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', fontWeight: 600 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-main)' }}>
+              <div style={{ width: '14px', height: '3px', borderRadius: '2px', backgroundColor: '#0F172A' }} />
               Consumer Demand (MW)
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10B981' }}>
-              <div style={{ width: '12px', height: '3px', backgroundColor: '#10B981' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--green-dark)' }}>
+              <div style={{ width: '14px', height: '3px', borderRadius: '2px', backgroundColor: 'var(--green)' }} />
               Actual Wind (MW)
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#F59E0B' }}>
-              <div style={{ width: '12px', height: '3px', backgroundColor: '#F59E0B' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--orange-dark)' }}>
+              <div style={{ width: '14px', height: '3px', borderRadius: '2px', backgroundColor: 'var(--orange)' }} />
               Hedged Thermal Procured
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#6366F1' }}>
-              <div style={{ width: '12px', height: '3px', backgroundColor: '#6366F1', strokeDasharray: '2 2' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--red-dark)' }}>
+              <div style={{ width: '14px', height: 0, borderTop: '2px dashed var(--red)' }} />
               Naive Procured
             </span>
           </div>
@@ -401,27 +397,27 @@ export default function ProcurementSimulator({ gateHour }) {
         <div style={{ width: '100%', height: '380px' }}>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={timeline} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis dataKey="time" stroke="#64748B" fontSize={10} interval={3} />
               <YAxis stroke="#64748B" fontSize={10} tickFormatter={(val) => `${(val / 1000).toFixed(0)}k`} />
               <Tooltip content={<SimTooltip />} />
               
-              <Line type="monotone" dataKey="consumerDemandMW" stroke="#FFFFFF" strokeWidth={2} dot={false} name="Consumer Demand" />
-              <Line type="monotone" dataKey="actualWindMW" stroke="#10B981" strokeWidth={2.2} dot={false} name="Actual Wind" />
-              <Line type="monotone" dataKey="hedgedProcureMW" stroke="#F59E0B" strokeWidth={2.5} dot={false} name="Hedged Thermal Procured" />
-              <Line type="monotone" dataKey="naiveProcureMW" stroke="#6366F1" strokeWidth={1.5} strokeDasharray="3 3" dot={false} name="Naive Thermal Procured" />
+              <Line type="monotone" dataKey="consumerDemandMW" stroke="#0F172A" strokeWidth={2} dot={false} name="Consumer Demand" />
+              <Line type="monotone" dataKey="actualWindMW" stroke="#16A34A" strokeWidth={2.2} dot={false} name="Actual Wind" />
+              <Line type="monotone" dataKey="hedgedProcureMW" stroke="#EA580C" strokeWidth={2.5} dot={false} name="Hedged Thermal Procured" />
+              <Line type="monotone" dataKey="naiveProcureMW" stroke="#DC2626" strokeWidth={1.5} strokeDasharray="3 3" dot={false} name="Naive Thermal Procured" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Real-Time Imbalance Exposure Chart */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
+      <div className="glass-panel" style={{ padding: '24px', background: '#FFFFFF' }}>
         <div style={{ marginBottom: '16px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', margin: 0 }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
             Real-Time Imbalance MW: Naive vs Hedged Procurement
           </h3>
-          <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+          <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '3px' }}>
             Negative bars (Red) = Short power position (utility must buy at penalty Cashout SBP) | Positive bars (Green) = Long power position
           </p>
         </div>
@@ -429,32 +425,32 @@ export default function ProcurementSimulator({ gateHour }) {
         <div style={{ width: '100%', height: '260px' }}>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={timeline} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis dataKey="time" stroke="#64748B" fontSize={10} interval={3} />
               <YAxis stroke="#64748B" fontSize={10} />
               <Tooltip content={<ImbalanceTooltip />} />
-              <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" />
+              <ReferenceLine y={0} stroke="#94A3B8" />
               
-              <Bar dataKey="naiveImbalanceMW" fill="#F43F5E" fillOpacity={0.6} name="Naive Imbalance (MW)" />
-              <Bar dataKey="hedgedImbalanceMW" fill="#10B981" fillOpacity={0.8} name="Hedged Imbalance (MW)" />
+              <Bar dataKey="naiveImbalanceMW" fill="#DC2626" fillOpacity={0.7} name="Naive Imbalance (MW)" />
+              <Bar dataKey="hedgedImbalanceMW" fill="#16A34A" fillOpacity={0.85} name="Hedged Imbalance (MW)" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Settlement Period Procurement & Imbalance Ledger Table */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '14px' }}>
+      <div className="glass-panel" style={{ padding: '24px', background: '#FFFFFF' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '14px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', margin: 0 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
               Settlement Period Data Ledger ({targetDate})
             </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '3px' }}>
               Granular half-hourly breakdown of power balances, thermal contracts, and imbalance cashout positions
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             {/* Search Input */}
             <div style={{ position: 'relative' }}>
               <input
@@ -468,15 +464,16 @@ export default function ProcurementSimulator({ gateHour }) {
               <Search size={13} style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
             </div>
 
-            {/* Filter Toggle */}
-            <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '6px', padding: '2px' }}>
+            {/* Filter Toggle Segmented Control */}
+            <div className="segmented-control">
               <button
                 onClick={() => setLedgerFilter('all')}
                 style={{
-                  padding: '4px 10px',
-                  borderRadius: '4px',
-                  background: ledgerFilter === 'all' ? 'var(--accent-cyan)' : 'transparent',
-                  color: ledgerFilter === 'all' ? '#000000' : 'var(--text-muted)',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  background: ledgerFilter === 'all' ? '#FFFFFF' : 'transparent',
+                  color: ledgerFilter === 'all' ? 'var(--blue-dark)' : 'var(--text-dim)',
+                  boxShadow: ledgerFilter === 'all' ? '0 1px 2px rgba(15, 23, 42, 0.08)' : 'none',
                   fontSize: '11.5px',
                   fontWeight: 600,
                   border: 'none',
@@ -488,10 +485,11 @@ export default function ProcurementSimulator({ gateHour }) {
               <button
                 onClick={() => setLedgerFilter('short_only')}
                 style={{
-                  padding: '4px 10px',
-                  borderRadius: '4px',
-                  background: ledgerFilter === 'short_only' ? '#F43F5E' : 'transparent',
-                  color: ledgerFilter === 'short_only' ? '#FFFFFF' : 'var(--text-muted)',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  background: ledgerFilter === 'short_only' ? 'var(--red-soft)' : 'transparent',
+                  color: ledgerFilter === 'short_only' ? 'var(--red-dark)' : 'var(--text-dim)',
+                  boxShadow: ledgerFilter === 'short_only' ? '0 1px 2px rgba(220, 38, 38, 0.1)' : 'none',
                   fontSize: '11.5px',
                   fontWeight: 600,
                   border: 'none',
@@ -503,10 +501,11 @@ export default function ProcurementSimulator({ gateHour }) {
               <button
                 onClick={() => setLedgerFilter('long_only')}
                 style={{
-                  padding: '4px 10px',
-                  borderRadius: '4px',
-                  background: ledgerFilter === 'long_only' ? '#10B981' : 'transparent',
-                  color: ledgerFilter === 'long_only' ? '#FFFFFF' : 'var(--text-muted)',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  background: ledgerFilter === 'long_only' ? 'var(--green-soft)' : 'transparent',
+                  color: ledgerFilter === 'long_only' ? 'var(--green-dark)' : 'var(--text-dim)',
+                  boxShadow: ledgerFilter === 'long_only' ? '0 1px 2px rgba(22, 163, 74, 0.1)' : 'none',
                   fontSize: '11.5px',
                   fontWeight: 600,
                   border: 'none',
@@ -520,18 +519,13 @@ export default function ProcurementSimulator({ gateHour }) {
             {/* Export Button */}
             <button
               onClick={handleExportLedgerCSV}
+              className="btn-pill-blue"
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '5px',
                 padding: '6px 12px',
-                borderRadius: '6px',
-                background: 'rgba(6, 182, 212, 0.1)',
-                border: '1px solid rgba(6, 182, 212, 0.3)',
-                color: 'var(--accent-cyan)',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer'
+                fontSize: '12px'
               }}
             >
               <Download size={13} />
@@ -542,18 +536,18 @@ export default function ProcurementSimulator({ gateHour }) {
 
         {/* Ledger Table */}
         <div style={{ overflowX: 'auto', maxHeight: '380px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
-            <thead style={{ position: 'sticky', top: 0, background: '#0F172A', zIndex: 10 }}>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: 'var(--text-muted)' }}>
-                <th style={{ padding: '10px 12px', fontWeight: 600 }}>SP #</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600 }}>Time</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Consumer Demand</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Actual Wind</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>DA Wind Forecast</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Hedged Thermal</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Naive Thermal</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Hedged Imbalance</th>
-                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'center' }}>Balancing Status</th>
+          <table className="premium-table">
+            <thead>
+              <tr>
+                <th>SP #</th>
+                <th>Time</th>
+                <th style={{ textAlign: 'right' }}>Consumer Demand</th>
+                <th style={{ textAlign: 'right' }}>Actual Wind</th>
+                <th style={{ textAlign: 'right' }}>DA Wind Forecast</th>
+                <th style={{ textAlign: 'right' }}>Hedged Thermal</th>
+                <th style={{ textAlign: 'right' }}>Naive Thermal</th>
+                <th style={{ textAlign: 'right' }}>Hedged Imbalance</th>
+                <th style={{ textAlign: 'center' }}>Balancing Status</th>
               </tr>
             </thead>
             <tbody>
@@ -561,40 +555,34 @@ export default function ProcurementSimulator({ gateHour }) {
                 const isShort = row.hedgedImbalanceMW < 0;
                 const isLong = row.hedgedImbalanceMW > 0;
                 return (
-                  <tr 
-                    key={idx}
-                    style={{ 
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
-                      background: idx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent'
-                    }}
-                  >
-                    <td className="mono-num" style={{ padding: '8px 12px', fontWeight: 700, color: '#38BDF8' }}>
+                  <tr key={idx}>
+                    <td className="mono-num" style={{ fontWeight: 700, color: 'var(--blue-dark)' }}>
                       SP {row.settlementPeriod}
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', color: 'var(--text-muted)' }}>
+                    <td className="mono-num" style={{ color: 'var(--text-dim)' }}>
                       {row.time}
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#FFFFFF' }}>
+                    <td className="mono-num" style={{ textAlign: 'right', color: 'var(--text-main)' }}>
                       {row.consumerDemandMW?.toLocaleString()} MW
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#10B981', fontWeight: 600 }}>
+                    <td className="mono-num" style={{ textAlign: 'right', color: 'var(--green-dark)', fontWeight: 600 }}>
                       {row.actualWindMW?.toLocaleString()} MW
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#06B6D4' }}>
+                    <td className="mono-num" style={{ textAlign: 'right', color: 'var(--blue-dark)' }}>
                       {row.forecastWindMW?.toLocaleString()} MW
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#F59E0B', fontWeight: 600 }}>
+                    <td className="mono-num" style={{ textAlign: 'right', color: 'var(--orange-dark)', fontWeight: 600 }}>
                       {row.hedgedProcureMW?.toLocaleString()} MW
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#A5B4FC' }}>
+                    <td className="mono-num" style={{ textAlign: 'right', color: 'var(--text-dim)' }}>
                       {row.naiveProcureMW?.toLocaleString()} MW
                     </td>
-                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 700, color: isShort ? '#FB7185' : '#34D399' }}>
+                    <td className="mono-num" style={{ textAlign: 'right', fontWeight: 700, color: isShort ? 'var(--red-dark)' : 'var(--green-dark)' }}>
                       {row.hedgedImbalanceMW > 0 ? `+${row.hedgedImbalanceMW.toLocaleString()}` : row.hedgedImbalanceMW?.toLocaleString()} MW
                     </td>
-                    <td style={{ padding: '8px 12px', textAlign: 'center' }}>
+                    <td style={{ textAlign: 'center' }}>
                       {isShort ? (
-                        <span className="badge-status badge-rose" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                        <span className="badge-status badge-red" style={{ fontSize: '10px', padding: '2px 8px' }}>
                           Short Exposure
                         </span>
                       ) : isLong ? (
@@ -602,7 +590,7 @@ export default function ProcurementSimulator({ gateHour }) {
                           Long / Safe
                         </span>
                       ) : (
-                        <span className="badge-status badge-cyan" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                        <span className="badge-status badge-blue" style={{ fontSize: '10px', padding: '2px 8px' }}>
                           Balanced
                         </span>
                       )}
@@ -614,7 +602,7 @@ export default function ProcurementSimulator({ gateHour }) {
           </table>
         </div>
 
-        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--text-dim)' }}>
+        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', color: 'var(--text-dim)' }}>
           <span>Showing {filteredTimeline.length} of {timeline.length} settlement periods for delivery date {targetDate}</span>
           <span>Imbalance prices: SBP £{sbpPrice}/MWh | SSP £{sspPrice}/MWh | Day-Ahead £{daPrice}/MWh</span>
         </div>
@@ -628,13 +616,20 @@ function SimTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0]?.payload || {};
   return (
-    <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '8px', padding: '12px', fontSize: '12px' }}>
-      <div style={{ fontWeight: 700, color: '#FFFFFF', marginBottom: '6px' }}>Time: {d.time} (SP {d.settlementPeriod})</div>
-      <div style={{ color: '#FFFFFF' }}>Demand: {d.consumerDemandMW?.toLocaleString()} MW</div>
-      <div style={{ color: '#10B981' }}>Actual Wind: {d.actualWindMW?.toLocaleString()} MW</div>
-      <div style={{ color: '#06B6D4' }}>Forecast Wind: {d.forecastWindMW?.toLocaleString()} MW</div>
-      <div style={{ color: '#F59E0B', marginTop: '4px', fontWeight: 600 }}>Hedged Thermal Needed: {d.hedgedProcureMW?.toLocaleString()} MW</div>
-      <div style={{ color: '#A5B4FC' }}>Naive Thermal Needed: {d.naiveProcureMW?.toLocaleString()} MW</div>
+    <div style={{ 
+      background: '#FFFFFF', 
+      border: '1px solid var(--border-subtle)', 
+      borderRadius: '8px', 
+      padding: '12px 14px', 
+      fontSize: '12px',
+      boxShadow: 'var(--shadow-modal)'
+    }}>
+      <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px' }}>Time: {d.time} (SP {d.settlementPeriod})</div>
+      <div style={{ color: 'var(--text-main)' }}>Demand: {d.consumerDemandMW?.toLocaleString()} MW</div>
+      <div style={{ color: 'var(--green-dark)' }}>Actual Wind: {d.actualWindMW?.toLocaleString()} MW</div>
+      <div style={{ color: 'var(--blue-dark)' }}>Forecast Wind: {d.forecastWindMW?.toLocaleString()} MW</div>
+      <div style={{ color: 'var(--orange-dark)', marginTop: '4px', fontWeight: 600 }}>Hedged Thermal Needed: {d.hedgedProcureMW?.toLocaleString()} MW</div>
+      <div style={{ color: 'var(--red-dark)' }}>Naive Thermal Needed: {d.naiveProcureMW?.toLocaleString()} MW</div>
     </div>
   );
 }
@@ -643,12 +638,19 @@ function ImbalanceTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0]?.payload || {};
   return (
-    <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '8px', padding: '10px', fontSize: '12px' }}>
-      <div style={{ fontWeight: 700, color: '#FFFFFF' }}>Time: {d.time} (SP {d.settlementPeriod})</div>
-      <div style={{ color: d.naiveImbalanceMW < 0 ? '#FB7185' : '#34D399', marginTop: '4px' }}>
+    <div style={{ 
+      background: '#FFFFFF', 
+      border: '1px solid var(--border-subtle)', 
+      borderRadius: '8px', 
+      padding: '10px 14px', 
+      fontSize: '12px',
+      boxShadow: 'var(--shadow-modal)'
+    }}>
+      <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>Time: {d.time} (SP {d.settlementPeriod})</div>
+      <div style={{ color: d.naiveImbalanceMW < 0 ? 'var(--red-dark)' : 'var(--green-dark)', marginTop: '4px', fontWeight: 600 }}>
         Naive Imbalance: {d.naiveImbalanceMW > 0 ? `+${d.naiveImbalanceMW}` : d.naiveImbalanceMW} MW
       </div>
-      <div style={{ color: d.hedgedImbalanceMW < 0 ? '#FB7185' : '#34D399' }}>
+      <div style={{ color: d.hedgedImbalanceMW < 0 ? 'var(--red-dark)' : 'var(--green-dark)', fontWeight: 600 }}>
         Hedged Imbalance: {d.hedgedImbalanceMW > 0 ? `+${d.hedgedImbalanceMW}` : d.hedgedImbalanceMW} MW
       </div>
     </div>

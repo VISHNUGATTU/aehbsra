@@ -84,9 +84,9 @@ export default function App() {
       {/* Main Content Area */}
       <main>
         {loading && !overviewData ? (
-          <div className="glass-panel" style={{ padding: '80px', textAlign: 'center' }}>
+          <div className="glass-panel" style={{ padding: '80px 24px', textAlign: 'center', background: '#FFFFFF' }}>
             <div className="pulse-indicator" style={{ width: '16px', height: '16px', margin: '0 auto 16px auto' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#FFFFFF', marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
               Synchronizing UK Day-Ahead Elexon Data...
             </h3>
             <p style={{ fontSize: '13px', color: 'var(--text-dim)', margin: 0 }}>
@@ -94,8 +94,8 @@ export default function App() {
             </p>
           </div>
         ) : error ? (
-          <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', borderColor: 'var(--accent-rose)' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FB7185', marginBottom: '8px' }}>
+          <div className="glass-panel" style={{ padding: '40px 24px', textAlign: 'center', background: 'var(--red-soft)', borderColor: 'var(--red-border)' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--red-dark)', marginBottom: '8px' }}>
               Connection Error
             </h3>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
@@ -103,15 +103,7 @@ export default function App() {
             </p>
             <button
               onClick={() => window.location.reload()}
-              style={{
-                padding: '8px 18px',
-                borderRadius: '6px',
-                background: 'var(--accent-cyan)',
-                border: 'none',
-                color: '#000000',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
+              className="btn-primary"
             >
               Retry Connection
             </button>
@@ -166,9 +158,9 @@ export default function App() {
 
       {/* Global App Footer */}
       <footer style={{ 
-        marginTop: '40px', 
+        marginTop: '48px', 
         paddingTop: '20px', 
-        borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+        borderTop: '1px solid var(--border-subtle)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -178,10 +170,10 @@ export default function App() {
         color: 'var(--text-dim)'
       }}>
         <div>
-          VORTEX Power Procurement Decision Support System | Built with React & Python FastAPI
+          VORTEX Power Procurement Decision Support System | Institutional Day-Ahead Energy Trading Desk
         </div>
         <div>
-          Data Source: Official Elexon BMRS Open Data Streams (FUELHH & WINDFOR) | January 2026
+          Data Source: Official Elexon BMRS Open Data Streams (FUELHH & WINDFOR) | January 2026 Audit
         </div>
       </footer>
     </div>

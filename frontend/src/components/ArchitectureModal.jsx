@@ -3,13 +3,10 @@ import {
   X, 
   Code2, 
   Layers, 
-  Database, 
   Cpu, 
-  Terminal, 
   ShieldCheck, 
   CheckCircle2,
-  FileText,
-  Boxes
+  FileText
 } from 'lucide-react';
 
 export default function ArchitectureModal({ isOpen, onClose }) {
@@ -21,8 +18,8 @@ export default function ArchitectureModal({ isOpen, onClose }) {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: 'rgba(0, 0, 0, 0.85)',
-      backdropFilter: 'blur(8px)',
+      background: 'rgba(15, 23, 42, 0.45)',
+      backdropFilter: 'blur(6px)',
       zIndex: 1000,
       display: 'flex',
       alignItems: 'center',
@@ -33,66 +30,87 @@ export default function ArchitectureModal({ isOpen, onClose }) {
         maxWidth: '1000px',
         width: '100%',
         maxHeight: '90vh',
-        background: '#0D1527',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
+        background: '#FFFFFF',
+        border: '1px solid var(--border-subtle)',
         padding: '30px',
         borderRadius: '16px',
-        boxShadow: '0 25px 60px rgba(0,0,0,0.8)',
+        boxShadow: 'var(--shadow-modal)',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden'
       }}>
         
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.2)', color: '#A5B4FC' }}>
-              <Code2 size={24} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid var(--border-subtle)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ 
+              width: '42px', 
+              height: '42px', 
+              borderRadius: '10px', 
+              background: 'var(--blue-soft)', 
+              color: 'var(--blue-dark)',
+              border: '1px solid var(--blue-border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Code2 size={22} />
             </div>
             <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
-                Internal Technical Lead Review & Knowledge Transfer
+              <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+                Internal Technical Lead Review & Architecture Transfer
               </h2>
-              <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+              <p style={{ fontSize: '12.5px', color: 'var(--text-dim)', margin: 0, marginTop: '3px' }}>
                 Software Design, Algorithmic Integrity, Pipeline Architecture, and Code Walkthrough
               </p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', padding: '4px' }}
+            style={{ 
+              background: 'var(--bg-sunken)', 
+              border: '1px solid var(--border-subtle)', 
+              borderRadius: '8px',
+              color: 'var(--text-dim)', 
+              cursor: 'pointer', 
+              padding: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Section Tabs */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+        {/* Section Tabs Segmented Control */}
+        <div className="segmented-control" style={{ marginBottom: '20px', alignSelf: 'flex-start' }}>
           <button
             onClick={() => setActiveSection('architecture')}
             className={`nav-tab-btn ${activeSection === 'architecture' ? 'active' : ''}`}
-            style={{ padding: '6px 14px', fontSize: '13px' }}
+            style={{ padding: '6px 14px', fontSize: '12.5px' }}
           >
             <Layers size={14} /> System Architecture
           </button>
           <button
             onClick={() => setActiveSection('algorithm')}
             className={`nav-tab-btn ${activeSection === 'algorithm' ? 'active' : ''}`}
-            style={{ padding: '6px 14px', fontSize: '13px' }}
+            style={{ padding: '6px 14px', fontSize: '12.5px' }}
           >
             <Cpu size={14} /> Look-Ahead Bias Prevention
           </button>
           <button
             onClick={() => setActiveSection('metrics')}
             className={`nav-tab-btn ${activeSection === 'metrics' ? 'active' : ''}`}
-            style={{ padding: '6px 14px', fontSize: '13px' }}
+            style={{ padding: '6px 14px', fontSize: '12.5px' }}
           >
             <FileText size={14} /> Mathematical Formulation
           </button>
           <button
             onClick={() => setActiveSection('qa')}
             className={`nav-tab-btn ${activeSection === 'qa' ? 'active' : ''}`}
-            style={{ padding: '6px 14px', fontSize: '13px' }}
+            style={{ padding: '6px 14px', fontSize: '12.5px' }}
           >
             <ShieldCheck size={14} /> Testing & Quality Assurance
           </button>
@@ -104,33 +122,35 @@ export default function ArchitectureModal({ isOpen, onClose }) {
           {activeSection === 'architecture' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               
-              {/* Architecture Diagram Box */}
-              <div style={{ background: '#090D16', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <h4 style={{ fontSize: '14px', color: 'var(--accent-cyan)', marginBottom: '14px' }}>Data Lineage & Component Flow</h4>
+              {/* Architecture Lineage Flow */}
+              <div style={{ background: 'var(--bg-sunken)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
+                <h4 style={{ fontSize: '14px', color: 'var(--blue-dark)', marginBottom: '14px', fontWeight: 700 }}>
+                  Data Lineage & Component Flow
+                </h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', textAlign: 'center' }}>
                   
-                  <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--accent-emerald)', fontWeight: 700, marginBottom: '4px' }}>1. Elexon Ingestion</div>
-                    <div style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>FUELHH & WINDFOR</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>Automated streaming + Local fast cache</div>
+                  <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--green-dark)', fontWeight: 700, marginBottom: '4px' }}>1. Elexon Ingestion</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--text-main)', fontWeight: 700 }}>FUELHH & WINDFOR</div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>Automated fetch + Local parquet cache</div>
                   </div>
 
-                  <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ fontSize: '11px', color: 'var(--accent-cyan)', fontWeight: 700, marginBottom: '4px' }}>2. Decision Engine</div>
-                    <div style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>DayAheadEngine</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>Strict D-1 Gate cut-off filter</div>
+                  <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--blue-dark)', fontWeight: 700, marginBottom: '4px' }}>2. Decision Engine</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--text-main)', fontWeight: 700 }}>DayAheadEngine</div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>Strict D-1 Gate cut-off filter</div>
                   </div>
 
-                  <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ fontSize: '11px', color: '#FBBF24', fontWeight: 700, marginBottom: '4px' }}>3. Analytics Engine</div>
-                    <div style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>Metrics & Simulator</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>Vectorized numpy/scipy quantiles</div>
+                  <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--yellow-dark)', fontWeight: 700, marginBottom: '4px' }}>3. Analytics Engine</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--text-main)', fontWeight: 700 }}>Metrics & Simulator</div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>Vectorized numpy/scipy quantiles</div>
                   </div>
 
-                  <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div style={{ fontSize: '11px', color: '#A5B4FC', fontWeight: 700, marginBottom: '4px' }}>4. UI Trading Portal</div>
-                    <div style={{ fontSize: '12px', color: '#FFFFFF', fontWeight: 600 }}>React 19 + Recharts</div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginTop: '4px' }}>Bloomberg-styled interactive dashboard</div>
+                  <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--orange-dark)', fontWeight: 700, marginBottom: '4px' }}>4. UI Trading Portal</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--text-main)', fontWeight: 700 }}>React 19 + Recharts</div>
+                    <div style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>Institutional light trading desk</div>
                   </div>
 
                 </div>
@@ -138,20 +158,20 @@ export default function ArchitectureModal({ isOpen, onClose }) {
 
               {/* Codebase Anatomy */}
               <div>
-                <h4 style={{ fontSize: '14px', color: '#FFFFFF', marginBottom: '10px' }}>Directory & Module Layout</h4>
-                <div style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)', fontFamily: 'var(--font-mono)', fontSize: '12px', lineHeight: 1.6, color: '#E2E8F0' }}>
-                  <div>├── <strong style={{ color: '#38BDF8' }}>backend/</strong></div>
-                  <div>│   ├── <strong style={{ color: '#34D399' }}>app/data_pipeline.py</strong>     # Elexon BMRS ingestion, validation & local cache</div>
-                  <div>│   ├── <strong style={{ color: '#34D399' }}>app/day_ahead_engine.py</strong>  # Day-Ahead Gate Closure matching & look-ahead filter</div>
-                  <div>│   ├── <strong style={{ color: '#34D399' }}>app/metrics_engine.py</strong>    # Quantitative metrics (MAE, RMSE, WAPE, Bias, Quantiles)</div>
-                  <div>│   ├── <strong style={{ color: '#34D399' }}>app/simulator_engine.py</strong>  # Risk buffer & residual thermal procurement simulator</div>
-                  <div>│   ├── <strong style={{ color: '#34D399' }}>app/api/routes.py</strong>        # Clean RESTful endpoints</div>
-                  <div>│   └── <strong style={{ color: '#34D399' }}>tests/test_backend.py</strong>   # 8 pytest unit and integration tests (100% pass)</div>
-                  <div>├── <strong style={{ color: '#38BDF8' }}>frontend/</strong></div>
-                  <div>│   ├── <strong style={{ color: '#FBBF24' }}>src/components/</strong>          # Modular views (DayAheadView, AccuracyLab, Simulator)</div>
-                  <div>│   ├── <strong style={{ color: '#FBBF24' }}>src/index.css</strong>            # Glassmorphic dark trading design system</div>
-                  <div>│   └── <strong style={{ color: '#FBBF24' }}>src/services/api.js</strong>      # Frontend API client</div>
-                  <div>└── <strong style={{ color: '#A5B4FC' }}>Dockerfile & docker-compose.yml</strong> # 1-command reproducible runtime</div>
+                <h4 style={{ fontSize: '14px', color: 'var(--text-main)', marginBottom: '10px', fontWeight: 700 }}>Directory & Module Layout</h4>
+                <div style={{ background: '#FFFFFF', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '12px', lineHeight: 1.6, color: 'var(--text-main)' }}>
+                  <div>├── <strong style={{ color: 'var(--blue-dark)' }}>backend/</strong></div>
+                  <div>│   ├── <strong style={{ color: 'var(--green-dark)' }}>app/data_pipeline.py</strong>     # Elexon BMRS ingestion, validation & local cache</div>
+                  <div>│   ├── <strong style={{ color: 'var(--green-dark)' }}>app/day_ahead_engine.py</strong>  # Day-Ahead Gate Closure matching & look-ahead filter</div>
+                  <div>│   ├── <strong style={{ color: 'var(--green-dark)' }}>app/metrics_engine.py</strong>    # Quantitative metrics (MAE, RMSE, WAPE, Bias, Quantiles)</div>
+                  <div>│   ├── <strong style={{ color: 'var(--green-dark)' }}>app/simulator_engine.py</strong>  # Risk buffer & residual thermal procurement simulator</div>
+                  <div>│   ├── <strong style={{ color: 'var(--green-dark)' }}>app/api/routes.py</strong>        # Clean RESTful endpoints</div>
+                  <div>│   └── <strong style={{ color: 'var(--green-dark)' }}>tests/test_backend.py</strong>   # 8 pytest unit and integration tests (100% pass)</div>
+                  <div>├── <strong style={{ color: 'var(--blue-dark)' }}>frontend/</strong></div>
+                  <div>│   ├── <strong style={{ color: 'var(--yellow-dark)' }}>src/components/</strong>          # Modular views (DayAheadView, AccuracyLab, Simulator)</div>
+                  <div>│   ├── <strong style={{ color: 'var(--yellow-dark)' }}>src/index.css</strong>            # Professional light theme design system</div>
+                  <div>│   └── <strong style={{ color: 'var(--yellow-dark)' }}>src/services/api.js</strong>      # Frontend API client</div>
+                  <div>└── <strong style={{ color: 'var(--blue-dark)' }}>Dockerfile & docker-compose.yml</strong> # 1-command reproducible runtime</div>
                 </div>
               </div>
 
@@ -160,8 +180,8 @@ export default function ArchitectureModal({ isOpen, onClose }) {
 
           {activeSection === 'algorithm' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ background: 'rgba(6, 182, 212, 0.08)', border: '1px solid rgba(6, 182, 212, 0.3)', padding: '18px', borderRadius: '12px' }}>
-                <h4 style={{ color: 'var(--accent-cyan)', marginBottom: '8px', fontSize: '14px' }}>
+              <div style={{ background: 'var(--blue-soft)', border: '1px solid var(--blue-border)', padding: '18px', borderRadius: '12px' }}>
+                <h4 style={{ color: 'var(--blue-dark)', marginBottom: '8px', fontSize: '14px', fontWeight: 700 }}>
                   The Mathematical Problem: Look-Ahead Bias in Renewable Evaluation
                 </h4>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
@@ -169,19 +189,19 @@ export default function ArchitectureModal({ isOpen, onClose }) {
                 </p>
               </div>
 
-              <div style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)', fontSize: '12.5px', lineHeight: 1.7 }}>
-                <h4 style={{ color: '#FFFFFF', marginBottom: '8px' }}>Our Gate Closure Filtering Rule:</h4>
+              <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-subtle)', fontSize: '12.5px', lineHeight: 1.7 }}>
+                <h4 style={{ color: 'var(--text-main)', marginBottom: '8px', fontWeight: 700 }}>Our Gate Closure Filtering Rule:</h4>
                 <p style={{ color: 'var(--text-muted)', margin: 0 }}>
                   Let t be a settlement interval on delivery day D. For a gate closure hour H_gate (default 11:00 UTC), we define the cutoff timestamp:
                 </p>
-                <div style={{ background: '#090D16', padding: '10px 14px', borderRadius: '6px', fontFamily: 'var(--font-mono)', color: '#38BDF8', margin: '8px 0' }}>
+                <div style={{ background: 'var(--bg-sunken)', padding: '10px 14px', borderRadius: '6px', fontFamily: 'var(--font-mono)', color: 'var(--blue-dark)', margin: '8px 0', border: '1px solid var(--border-subtle)' }}>
                   GateClosure(D) = Timestamp(D - 1 day, hour=11, minute=0, second=0)
                 </div>
                 <p style={{ color: 'var(--text-muted)', margin: 0 }}>
                   The actionable forecast F_DA(t) is formally selected as:
                 </p>
-                <div style={{ background: '#090D16', padding: '10px 14px', borderRadius: '6px', fontFamily: 'var(--font-mono)', color: '#34D399', margin: '8px 0' }}>
-                  F_DA(t) = argmax(publishTime) for all f in WINDFOR where f.startTime == t AND f.publishTime &lt;= GateClosure(D)
+                <div style={{ background: 'var(--bg-sunken)', padding: '10px 14px', borderRadius: '6px', fontFamily: 'var(--font-mono)', color: 'var(--green-dark)', margin: '8px 0', border: '1px solid var(--border-subtle)' }}>
+                  {"F_DA(t) = argmax(publishTime) for all f in WINDFOR where f.startTime == t AND f.publishTime <= GateClosure(D)"}
                 </div>
               </div>
             </div>
@@ -191,42 +211,42 @@ export default function ArchitectureModal({ isOpen, onClose }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <h5 style={{ color: 'var(--accent-cyan)', marginBottom: '6px' }}>WAPE (Weighted Abs % Error)</h5>
-                  <div style={{ background: '#090D16', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#FFFFFF', marginBottom: '8px' }}>
-                    WAPE = ( ∑ |F_i - A_i| / ∑ A_i ) × 100
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-subtle)', borderTop: '3px solid var(--blue)' }}>
+                  <h5 style={{ color: 'var(--blue-dark)', marginBottom: '6px', fontWeight: 700 }}>WAPE (Weighted Abs % Error)</h5>
+                  <div style={{ background: 'var(--bg-sunken)', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-main)', marginBottom: '8px', border: '1px solid var(--border-subtle)' }}>
+                    {"WAPE = ( ∑ |F_i - A_i| / ∑ A_i ) × 100"}
                   </div>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
                     Standard MAPE fails in wind power because actual generation $A_i$ frequently drops near zero, causing infinite divisions. WAPE weights errors by volume, providing an uncorrupted measure (18.33% in Jan 2026).
                   </p>
                 </div>
 
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <h5 style={{ color: '#FBBF24', marginBottom: '6px' }}>Mean Directional Bias (MBE)</h5>
-                  <div style={{ background: '#090D16', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#FFFFFF', marginBottom: '8px' }}>
-                    Bias = (1/N) ∑ (F_i - A_i)
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-subtle)', borderTop: '3px solid var(--yellow)' }}>
+                  <h5 style={{ color: 'var(--yellow-dark)', marginBottom: '6px', fontWeight: 700 }}>Mean Directional Bias (MBE)</h5>
+                  <div style={{ background: 'var(--bg-sunken)', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-main)', marginBottom: '8px', border: '1px solid var(--border-subtle)' }}>
+                    {"Bias = (1/N) ∑ (F_i - A_i)"}
                   </div>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
                     Indicates systematic directional skew. Positive (+1,840 MW) signals consistent over-forecasting, creating dangerous short positions in balancing settlement.
                   </p>
                 </div>
 
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <h5 style={{ color: '#FB7185', marginBottom: '6px' }}>RMSE (Root Mean Square Error)</h5>
-                  <div style={{ background: '#090D16', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#FFFFFF', marginBottom: '8px' }}>
-                    RMSE = √ [ (1/N) ∑ (F_i - A_i)² ]
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-subtle)', borderTop: '3px solid var(--red)' }}>
+                  <h5 style={{ color: 'var(--red-dark)', marginBottom: '6px', fontWeight: 700 }}>RMSE (Root Mean Square Error)</h5>
+                  <div style={{ background: 'var(--bg-sunken)', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-main)', marginBottom: '8px', border: '1px solid var(--border-subtle)' }}>
+                    {"RMSE = √ [ (1/N) ∑ (F_i - A_i)² ]"}
                   </div>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
                     Penalizes large, rapid forecast swings quadratically (2,616.7 MW). High RMSE vs MAE indicates occasional severe forecasting failures.
                   </p>
                 </div>
 
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <h5 style={{ color: '#34D399', marginBottom: '6px' }}>Empirical Quantiles (P10 / P90)</h5>
-                  <div style={{ background: '#090D16', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#FFFFFF', marginBottom: '8px' }}>
+                <div style={{ background: '#FFFFFF', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-subtle)', borderTop: '3px solid var(--green)' }}>
+                  <h5 style={{ color: 'var(--green-dark)', marginBottom: '6px', fontWeight: 700 }}>Empirical Quantiles (P10 / P90)</h5>
+                  <div style={{ background: 'var(--bg-sunken)', padding: '8px', borderRadius: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-main)', marginBottom: '8px', border: '1px solid var(--border-subtle)' }}>
                     {"Q(p) = inf { e : F(e) >= p }"}
                   </div>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
                     Non-parametric confidence boundaries. P90 (+4,312 MW) defines the upper 90% tail over-prediction for safe hedging.
                   </p>
                 </div>
@@ -237,11 +257,11 @@ export default function ArchitectureModal({ isOpen, onClose }) {
 
           {activeSection === 'qa' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '16px', borderRadius: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#34D399', fontWeight: 700, marginBottom: '6px' }}>
+              <div style={{ background: 'var(--green-soft)', border: '1px solid var(--green-border)', padding: '18px', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--green-dark)', fontWeight: 700, marginBottom: '8px' }}>
                   <CheckCircle2 size={18} /> Test Suite Verification (Pytest 8.3.2)
                 </div>
-                <div style={{ fontSize: '13px', color: '#E2E8F0', lineHeight: 1.6 }}>
+                <div style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: 1.6 }}>
                   8 automated test suites passing with 100% success rate:
                   <ul style={{ paddingLeft: '20px', marginTop: '6px', color: 'var(--text-muted)' }}>
                     <li><code>test_data_pipeline_health</code>: Validates 1,488 SP records & 100% completeness.</li>
@@ -253,8 +273,8 @@ export default function ArchitectureModal({ isOpen, onClose }) {
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: '10px', fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                <strong style={{ color: '#FFFFFF' }}>Performance Benchmarks:</strong> Local cache guarantees sub-30ms response times for all endpoints. Vectorized numpy operations compute full monthly metrics and distributions in &lt;15ms.
+              <div style={{ background: 'var(--bg-sunken)', padding: '16px', borderRadius: '10px', fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.6, border: '1px solid var(--border-subtle)' }}>
+                <strong style={{ color: 'var(--text-main)' }}>Performance Benchmarks:</strong> Local cache guarantees sub-30ms response times for all endpoints. Vectorized numpy operations compute full monthly metrics and distributions in &lt;15ms.
               </div>
             </div>
           )}
@@ -262,18 +282,11 @@ export default function ArchitectureModal({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
           <button
             onClick={onClose}
-            style={{
-              padding: '8px 20px',
-              borderRadius: '6px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: 'none',
-              color: '#FFFFFF',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
+            className="btn-secondary"
+            style={{ fontSize: '13px', padding: '8px 20px' }}
           >
             Close Walkthrough
           </button>

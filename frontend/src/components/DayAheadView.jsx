@@ -7,9 +7,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
-  CartesianGrid,
-  ReferenceLine
+  CartesianGrid
 } from 'recharts';
 import { 
   Wind, 
@@ -17,7 +15,6 @@ import {
   AlertTriangle, 
   Percent, 
   Clock, 
-  Layers, 
   Info,
   Calendar,
   Flame,
@@ -102,49 +99,51 @@ export default function DayAheadView({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Control Panel Bar */}
-      <div className="glass-panel" style={{ padding: '16px 20px' }}>
+      <div className="glass-panel" style={{ padding: '16px 20px', background: '#FFFFFF' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           
-          {/* Date Presets */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {/* Date Presets Segmented Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Calendar size={15} /> Period:
             </span>
-            <button
-              onClick={() => handlePresetChange('month')}
-              className={`nav-tab-btn ${startDate === '2026-01-01' && endDate === '2026-01-31' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12.5px' }}
-            >
-              Full Jan 2026 (31 Days)
-            </button>
-            <button
-              onClick={() => handlePresetChange('w1')}
-              className={`nav-tab-btn ${startDate === '2026-01-01' && endDate === '2026-01-07' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12.5px' }}
-            >
-              Week 1 (Storm Surge)
-            </button>
-            <button
-              onClick={() => handlePresetChange('w2')}
-              className={`nav-tab-btn ${startDate === '2026-01-08' && endDate === '2026-01-14' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12.5px' }}
-            >
-              Week 2
-            </button>
-            <button
-              onClick={() => handlePresetChange('w3')}
-              className={`nav-tab-btn ${startDate === '2026-01-15' && endDate === '2026-01-21' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12.5px' }}
-            >
-              Week 3
-            </button>
-            <button
-              onClick={() => handlePresetChange('w4')}
-              className={`nav-tab-btn ${startDate === '2026-01-22' && endDate === '2026-01-28' ? 'active' : ''}`}
-              style={{ padding: '6px 12px', fontSize: '12.5px' }}
-            >
-              Week 4
-            </button>
+            <div className="segmented-control">
+              <button
+                onClick={() => handlePresetChange('month')}
+                className={`nav-tab-btn ${startDate === '2026-01-01' && endDate === '2026-01-31' ? 'active' : ''}`}
+                style={{ padding: '5px 12px', fontSize: '12px' }}
+              >
+                Full Jan 2026 (31 Days)
+              </button>
+              <button
+                onClick={() => handlePresetChange('w1')}
+                className={`nav-tab-btn ${startDate === '2026-01-01' && endDate === '2026-01-07' ? 'active' : ''}`}
+                style={{ padding: '5px 12px', fontSize: '12px' }}
+              >
+                Week 1 (Storm)
+              </button>
+              <button
+                onClick={() => handlePresetChange('w2')}
+                className={`nav-tab-btn ${startDate === '2026-01-08' && endDate === '2026-01-14' ? 'active' : ''}`}
+                style={{ padding: '5px 12px', fontSize: '12px' }}
+              >
+                Week 2
+              </button>
+              <button
+                onClick={() => handlePresetChange('w3')}
+                className={`nav-tab-btn ${startDate === '2026-01-15' && endDate === '2026-01-21' ? 'active' : ''}`}
+                style={{ padding: '5px 12px', fontSize: '12px' }}
+              >
+                Week 3
+              </button>
+              <button
+                onClick={() => handlePresetChange('w4')}
+                className={`nav-tab-btn ${startDate === '2026-01-22' && endDate === '2026-01-28' ? 'active' : ''}`}
+                style={{ padding: '5px 12px', fontSize: '12px' }}
+              >
+                Week 4
+              </button>
+            </div>
           </div>
 
           {/* Decision Gate Closure & Resolution Controls */}
@@ -152,8 +151,8 @@ export default function DayAheadView({
             
             {/* Gate Closure Selector */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Clock size={15} color="var(--accent-cyan)" /> Day-Ahead Gate:
+              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Clock size={15} color="var(--blue)" /> Day-Ahead Gate:
               </span>
               <select
                 id="select-gate-hour"
@@ -171,7 +170,7 @@ export default function DayAheadView({
 
             {/* Resolution Switch */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-dim)' }}>
                 Resolution:
               </span>
               <select
@@ -189,20 +188,8 @@ export default function DayAheadView({
             <button
               id="btn-export-csv"
               onClick={handleExportCSV}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 12px',
-                borderRadius: 'var(--radius-sm)',
-                background: 'rgba(6, 182, 212, 0.1)',
-                border: '1px solid rgba(6, 182, 212, 0.3)',
-                color: 'var(--accent-cyan)',
-                fontSize: '12.5px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
+              className="btn-pill-blue"
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 12px' }}
               title="Download currently filtered time series as CSV"
             >
               <Download size={14} />
@@ -213,7 +200,7 @@ export default function DayAheadView({
         </div>
       </div>
 
-      {/* KPI Cards Row */}
+      {/* KPI Cards Row (Strict 5 Semantic Colors) */}
       <div className="metrics-grid-5">
         <MetricCard
           title="Actual Wind Generation"
@@ -229,9 +216,9 @@ export default function DayAheadView({
           title="Day-Ahead Forecast"
           value={summary.meanForecastMW ? summary.meanForecastMW.toLocaleString() : '---'}
           unit="MW"
-          subtitle={`Latest available at ${gateHour}:00 D-1`}
+          subtitle={`Evaluated at ${gateHour}:00 D-1`}
           badgeText="Auction Basis"
-          badgeType="cyan"
+          badgeType="blue"
           icon={TrendingUp}
         />
 
@@ -239,9 +226,9 @@ export default function DayAheadView({
           title="Forecast Directional Bias"
           value={summary.bias ? (summary.bias > 0 ? `+${summary.bias}` : summary.bias) : '---'}
           unit="MW"
-          subtitle={summary.bias > 0 ? 'Systematic Over-forecast (Short Risk)' : 'Under-forecast'}
+          subtitle={summary.bias > 0 ? 'Persistent Over-forecast' : 'Under-forecast'}
           badgeText={summary.bias > 0 ? 'Short Risk Warning' : 'Long Position'}
-          badgeType={summary.bias > 0 ? 'amber' : 'green'}
+          badgeType={summary.bias > 0 ? 'yellow' : 'green'}
           icon={AlertTriangle}
         />
 
@@ -251,46 +238,59 @@ export default function DayAheadView({
           unit="MW"
           subtitle={`WAPE: ${summary.wape || '--'}% of volume`}
           badgeText="Mean Error"
-          badgeType="cyan"
+          badgeType="blue"
           icon={Percent}
         />
 
         <MetricCard
-          title="P90 Extreme Shortage Risk"
+          title="P90 Shortage Tail Risk"
           value={summary.quantiles?.p90 ? `+${summary.quantiles.p90}` : '---'}
           unit="MW"
           subtitle="90th percentile over-prediction"
           badgeText="Tail Risk Exposure"
-          badgeType="rose"
+          badgeType="red"
           icon={Flame}
         />
       </div>
 
-      {/* Executive Alert Banner */}
+      {/* Executive Alert Banner (Yellow / Amber Warning) */}
       <div className="glass-panel" style={{ 
         padding: '16px 20px', 
-        borderLeft: '4px solid var(--accent-amber)',
-        background: 'rgba(245, 158, 11, 0.05)',
+        borderLeft: '4px solid var(--yellow)',
+        background: 'var(--yellow-soft)',
+        borderColor: 'var(--yellow-border)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: '12px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <AlertTriangle color="var(--accent-amber)" size={20} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '8px',
+            background: '#FEF08A',
+            color: 'var(--yellow-dark)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <AlertTriangle size={18} />
+          </div>
           <div>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#FBBF24', margin: 0 }}>
-              Day-Ahead Procurement Insight: Persistent Over-Forecasting in January 2026
+            <h4 style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--yellow-deep)', margin: 0 }}>
+              Day-Ahead Procurement Advisory: Systematic Over-Forecasting Detected
             </h4>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, marginTop: '2px' }}>
-              At the <strong>{gateHour}:00 UTC D-1 Gate Closure</strong>, the national wind forecast systematically exceeded actual delivery by an average of <strong>+{summary.bias} MW</strong> ({summary.overForecastFrequencyPercent}% of hours). 
-              A procurement desk that buys residual thermal power without a buffer would face an unhedged <strong>short position</strong> settling at punitive System Buy Prices (SBP).
+            <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: 0, marginTop: '2px', lineHeight: 1.5 }}>
+              At the <strong>{gateHour}:00 UTC D-1 Gate Closure</strong>, the national wind forecast exceeded actual delivery by an average of <strong>+{summary.bias} MW</strong> ({summary.overForecastFrequencyPercent}% of hours). 
+              A procurement desk purchasing residual thermal power without a buffer faces an unhedged <strong>short position</strong> settling at punitive System Buy Prices (SBP).
             </p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--text-muted)', cursor: 'pointer' }}>
+        <div style={{ display: 'flex', gap: '16px', flexShrink: 0 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', fontWeight: 500, color: 'var(--text-muted)', cursor: 'pointer' }}>
             <input 
               type="checkbox" 
               checked={showIntraday} 
@@ -298,7 +298,7 @@ export default function DayAheadView({
             />
             Show Intraday Update
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--text-muted)', cursor: 'pointer' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', fontWeight: 500, color: 'var(--text-muted)', cursor: 'pointer' }}>
             <input 
               type="checkbox" 
               checked={showResidualDemand} 
@@ -310,34 +310,34 @@ export default function DayAheadView({
       </div>
 
       {/* Main Co-Plotted Time Series Chart */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="glass-panel" style={{ padding: '24px', background: '#FFFFFF' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', margin: 0 }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
               Actual Wind Generation vs Latest Available Day-Ahead Forecast
             </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '3px' }}>
               Forecast evaluated strictly at {gateHour}:00 UTC on Day D-1 (Zero look-ahead bias) | Resolution: {resolution}
             </p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '12px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10B981' }}>
-              <div style={{ width: '12px', height: '3px', backgroundColor: '#10B981', borderRadius: '2px' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', fontWeight: 600 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--green-dark)' }}>
+              <div style={{ width: '12px', height: '3px', backgroundColor: 'var(--green)', borderRadius: '2px' }} />
               Actual Delivered (MW)
             </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#06B6D4' }}>
-              <div style={{ width: '12px', height: '3px', backgroundColor: '#06B6D4', borderRadius: '2px' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--blue-dark)' }}>
+              <div style={{ width: '12px', height: '3px', backgroundColor: 'var(--blue)', borderRadius: '2px' }} />
               Day-Ahead Forecast (MW)
             </span>
             {showIntraday && (
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#A855F7' }}>
-                <div style={{ width: '12px', height: '3px', backgroundColor: '#A855F7', borderRadius: '2px', strokeDasharray: '2 2' }} />
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--yellow-dark)' }}>
+                <div style={{ width: '14px', height: 0, borderTop: '2px dashed var(--yellow)' }} />
                 Intraday Delivery-1h (MW)
               </span>
             )}
             {showResidualDemand && (
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#F59E0B' }}>
-                <div style={{ width: '12px', height: '3px', backgroundColor: '#F59E0B', borderRadius: '2px' }} />
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--orange-dark)' }}>
+                <div style={{ width: '12px', height: '3px', backgroundColor: 'var(--orange)', borderRadius: '2px' }} />
                 Residual Thermal Procurement Needed
               </span>
             )}
@@ -349,19 +349,15 @@ export default function DayAheadView({
             <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="actualGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#10B981" stopOpacity={0.0} />
-                </linearGradient>
-                <linearGradient id="forecastGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#06B6D4" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#16A34A" stopOpacity={0.18} />
+                  <stop offset="95%" stopColor="#16A34A" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="thermalGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.0} />
+                  <stop offset="5%" stopColor="#EA580C" stopOpacity={0.16} />
+                  <stop offset="95%" stopColor="#EA580C" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis 
                 dataKey="timeFormatted" 
                 stroke="#64748B" 
@@ -379,11 +375,11 @@ export default function DayAheadView({
               />
               <Tooltip content={<CustomTooltip />} />
               
-              {/* Areas */}
+              {/* Areas & Lines */}
               <Area 
                 type="monotone" 
                 dataKey="actual" 
-                stroke="#10B981" 
+                stroke="#16A34A" 
                 strokeWidth={2} 
                 fillOpacity={1} 
                 fill="url(#actualGrad)" 
@@ -392,7 +388,7 @@ export default function DayAheadView({
               <Line 
                 type="monotone" 
                 dataKey="forecastDA" 
-                stroke="#06B6D4" 
+                stroke="#2563EB" 
                 strokeWidth={2.5} 
                 dot={false}
                 name="Day-Ahead Forecast" 
@@ -401,7 +397,7 @@ export default function DayAheadView({
                 <Line 
                   type="monotone" 
                   dataKey="forecastIntraday" 
-                  stroke="#A855F7" 
+                  stroke="#CA8A04" 
                   strokeWidth={1.8} 
                   strokeDasharray="4 4" 
                   dot={false}
@@ -412,7 +408,7 @@ export default function DayAheadView({
                 <Area 
                   type="monotone" 
                   dataKey="residualThermal" 
-                  stroke="#F59E0B" 
+                  stroke="#EA580C" 
                   strokeWidth={1.8} 
                   fillOpacity={1} 
                   fill="url(#thermalGrad)" 
@@ -425,10 +421,29 @@ export default function DayAheadView({
       </div>
 
       {/* Explanatory Context Footer */}
-      <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-        <Info size={18} color="var(--accent-cyan)" />
+      <div className="glass-panel" style={{ 
+        padding: '16px 20px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '14px',
+        background: '#FFFFFF',
+        borderLeft: '4px solid var(--blue)'
+      }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '8px',
+          background: 'var(--blue-soft)',
+          color: 'var(--blue-dark)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          <Info size={18} />
+        </div>
         <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-          <strong>How Decision Gate Closures Work in UK Wholesale Trading:</strong> Power procurement contracts for delivery across Day D are submitted to EPEX SPOT GB or Nord Pool before 11:00 AM on Day D-1. The cyan line shows the exact forecast published prior to that cutoff. The purple dashed line shows how weather models adjusted by Delivery-1 hour, illustrating the intraday correction trajectory.
+          <strong>How Decision Gate Closures Work in UK Wholesale Trading:</strong> Power procurement contracts for delivery across Day D are submitted to EPEX SPOT GB or Nord Pool before 11:00 AM on Day D-1. The blue line shows the exact forecast published prior to that cutoff. The yellow dashed line shows how weather models adjusted by Delivery-1 hour, illustrating the intraday correction trajectory. The orange area represents the residual thermal power that must be procured.
         </p>
       </div>
 
@@ -443,27 +458,27 @@ function CustomTooltip({ active, payload, label }) {
 
   return (
     <div style={{
-      background: '#0F172A',
-      border: '1px solid rgba(255, 255, 255, 0.15)',
+      background: '#FFFFFF',
+      border: '1px solid var(--border-subtle)',
       borderRadius: '8px',
       padding: '12px 16px',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+      boxShadow: 'var(--shadow-modal)',
       minWidth: '220px'
     }}>
-      <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', marginBottom: '8px' }}>
+      <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '8px' }}>
         {d.timeFormatted} {d.settlementPeriod ? `(SP ${d.settlementPeriod})` : ''}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '12px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10B981' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--green-dark)' }}>
           <span>Actual Wind:</span>
           <span className="mono-num" style={{ fontWeight: 700 }}>{d.actual?.toLocaleString()} MW</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#06B6D4' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--blue-dark)' }}>
           <span>Day-Ahead Forecast:</span>
           <span className="mono-num" style={{ fontWeight: 700 }}>{d.forecastDA?.toLocaleString()} MW</span>
         </div>
         {d.forecastIntraday && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#A855F7' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--yellow-dark)' }}>
             <span>Intraday Forecast:</span>
             <span className="mono-num">{d.forecastIntraday?.toLocaleString()} MW</span>
           </div>
@@ -472,8 +487,8 @@ function CustomTooltip({ active, payload, label }) {
           display: 'flex', 
           justifyContent: 'space-between', 
           paddingTop: '6px', 
-          borderTop: '1px solid rgba(255,255,255,0.08)',
-          color: error > 0 ? '#FBBF24' : '#34D399'
+          borderTop: '1px solid var(--border-subtle)',
+          color: error > 0 ? 'var(--red-dark)' : 'var(--green-dark)'
         }}>
           <span>Forecast Error:</span>
           <span className="mono-num" style={{ fontWeight: 700 }}>
@@ -481,7 +496,7 @@ function CustomTooltip({ active, payload, label }) {
           </span>
         </div>
         {d.residualThermal && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#F59E0B', paddingTop: '4px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--orange-dark)', paddingTop: '4px' }}>
             <span>Thermal Needed:</span>
             <span className="mono-num">{d.residualThermal?.toLocaleString()} MW</span>
           </div>
