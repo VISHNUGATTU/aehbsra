@@ -129,3 +129,10 @@ def test_api_endpoints():
     })
     assert resp.status_code == 200
     assert "financialComparison" in resp.json()
+
+    # Lead-Time Comparison
+    resp = client.get("/api/lead-time-comparison")
+    assert resp.status_code == 200
+    comp_data = resp.json()
+    assert len(comp_data) >= 4
+    assert comp_data[0]["mae"] >= comp_data[-1]["mae"]

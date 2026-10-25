@@ -21,7 +21,11 @@ import {
   Sliders, 
   DollarSign,
   TrendingDown,
-  Layers
+  Layers,
+  Download,
+  Search,
+  Filter,
+  CheckCircle2
 } from 'lucide-react';
 import MetricCard from './MetricCard';
 import { executeSimulation } from '../services/api';
@@ -33,6 +37,9 @@ export default function ProcurementSimulator({ gateHour }) {
   const [daPrice, setDaPrice] = useState(78.0);
   const [sbpPrice, setSbpPrice] = useState(115.0);
   const [sspPrice, setSspPrice] = useState(48.0);
+
+  const [ledgerFilter, setLedgerFilter] = useState('all'); // 'all', 'short_only', 'long_only'
+  const [ledgerSearch, setLedgerSearch] = useState('');
 
   const [simResult, setSimResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -67,6 +74,42 @@ export default function ProcurementSimulator({ gateHour }) {
   const financial = simResult?.financialComparison || {};
   const risk = simResult?.riskComparison || {};
   const timeline = simResult?.timeline || [];
+
+  const handleExportLedgerCSV = () => {
+    if (!timeline || timeline.length === 0) return;
+    const headers = ['Settlement_Period', 'Time', 'Demand_MW', 'Actual_Wind_MW', 'Forecast_Wind_MW', 'Hedged_Thermal_Procured_MW', 'Naive_Procured_MW', 'Hedged_Imbalance_MW', 'Naive_Imbalance_MW'];
+    const rows = timeline.map(d => [
+      d.settlementPeriod,
+      `"${d.time}"`,
+      d.consumerDemandMW,
+      d.actualWindMW,
+      d.forecastWindMW,
+      d.hedgedProcureMW,
+      d.naiveProcureMW,
+      d.hedgedImbalanceMW,
+      d.naiveImbalanceMW
+    ].join(','));
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `vortex_settlement_ledger_${targetDate}_${strategy}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const filteredTimeline = timeline.filter(d => {
+    if (ledgerFilter === 'short_only' && d.hedgedImbalanceMW >= 0) return false;
+    if (ledgerFilter === 'long_only' && d.hedgedImbalanceMW <= 0) return false;
+    if (ledgerSearch) {
+      const q = ledgerSearch.toLowerCase();
+      const matchSp = String(d.settlementPeriod).includes(q);
+      const matchTime = (d.time || '').toLowerCase().includes(q);
+      if (!matchSp && !matchTime) return false;
+    }
+    return true;
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -396,6 +439,184 @@ export default function ProcurementSimulator({ gateHour }) {
               <Bar dataKey="hedgedImbalanceMW" fill="#10B981" fillOpacity={0.8} name="Hedged Imbalance (MW)" />
             </ComposedChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Settlement Period Procurement & Imbalance Ledger Table */}
+      <div className="glass-panel" style={{ padding: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '14px' }}>
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF', margin: 0 }}>
+              Settlement Period Data Ledger ({targetDate})
+            </h3>
+            <p style={{ fontSize: '12px', color: 'var(--text-dim)', margin: 0, marginTop: '2px' }}>
+              Granular half-hourly breakdown of power balances, thermal contracts, and imbalance cashout positions
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {/* Search Input */}
+            <div style={{ position: 'relative' }}>
+              <input
+                type="text"
+                placeholder="Search SP (e.g. 17) or Time..."
+                value={ledgerSearch}
+                onChange={(e) => setLedgerSearch(e.target.value)}
+                className="custom-input"
+                style={{ width: '180px', paddingLeft: '28px', fontSize: '12px' }}
+              />
+              <Search size={13} style={{ position: 'absolute', left: '9px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+            </div>
+
+            {/* Filter Toggle */}
+            <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '6px', padding: '2px' }}>
+              <button
+                onClick={() => setLedgerFilter('all')}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: '4px',
+                  background: ledgerFilter === 'all' ? 'var(--accent-cyan)' : 'transparent',
+                  color: ledgerFilter === 'all' ? '#000000' : 'var(--text-muted)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                All (48)
+              </button>
+              <button
+                onClick={() => setLedgerFilter('short_only')}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: '4px',
+                  background: ledgerFilter === 'short_only' ? '#F43F5E' : 'transparent',
+                  color: ledgerFilter === 'short_only' ? '#FFFFFF' : 'var(--text-muted)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Short Only
+              </button>
+              <button
+                onClick={() => setLedgerFilter('long_only')}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: '4px',
+                  background: ledgerFilter === 'long_only' ? '#10B981' : 'transparent',
+                  color: ledgerFilter === 'long_only' ? '#FFFFFF' : 'var(--text-muted)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Long Only
+              </button>
+            </div>
+
+            {/* Export Button */}
+            <button
+              onClick={handleExportLedgerCSV}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.3)',
+                color: 'var(--accent-cyan)',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              <Download size={13} />
+              <span>Export Ledger</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Ledger Table */}
+        <div style={{ overflowX: 'auto', maxHeight: '380px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12px' }}>
+            <thead style={{ position: 'sticky', top: 0, background: '#0F172A', zIndex: 10 }}>
+              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', color: 'var(--text-muted)' }}>
+                <th style={{ padding: '10px 12px', fontWeight: 600 }}>SP #</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600 }}>Time</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Consumer Demand</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Actual Wind</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>DA Wind Forecast</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Hedged Thermal</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Naive Thermal</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'right' }}>Hedged Imbalance</th>
+                <th style={{ padding: '10px 12px', fontWeight: 600, textAlign: 'center' }}>Balancing Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTimeline.map((row, idx) => {
+                const isShort = row.hedgedImbalanceMW < 0;
+                const isLong = row.hedgedImbalanceMW > 0;
+                return (
+                  <tr 
+                    key={idx}
+                    style={{ 
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+                      background: idx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent'
+                    }}
+                  >
+                    <td className="mono-num" style={{ padding: '8px 12px', fontWeight: 700, color: '#38BDF8' }}>
+                      SP {row.settlementPeriod}
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', color: 'var(--text-muted)' }}>
+                      {row.time}
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#FFFFFF' }}>
+                      {row.consumerDemandMW?.toLocaleString()} MW
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#10B981', fontWeight: 600 }}>
+                      {row.actualWindMW?.toLocaleString()} MW
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#06B6D4' }}>
+                      {row.forecastWindMW?.toLocaleString()} MW
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#F59E0B', fontWeight: 600 }}>
+                      {row.hedgedProcureMW?.toLocaleString()} MW
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', color: '#A5B4FC' }}>
+                      {row.naiveProcureMW?.toLocaleString()} MW
+                    </td>
+                    <td className="mono-num" style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 700, color: isShort ? '#FB7185' : '#34D399' }}>
+                      {row.hedgedImbalanceMW > 0 ? `+${row.hedgedImbalanceMW.toLocaleString()}` : row.hedgedImbalanceMW?.toLocaleString()} MW
+                    </td>
+                    <td style={{ padding: '8px 12px', textAlign: 'center' }}>
+                      {isShort ? (
+                        <span className="badge-status badge-rose" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                          Short Exposure
+                        </span>
+                      ) : isLong ? (
+                        <span className="badge-status badge-green" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                          Long / Safe
+                        </span>
+                      ) : (
+                        <span className="badge-status badge-cyan" style={{ fontSize: '10px', padding: '2px 8px' }}>
+                          Balanced
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--text-dim)' }}>
+          <span>Showing {filteredTimeline.length} of {timeline.length} settlement periods for delivery date {targetDate}</span>
+          <span>Imbalance prices: SBP £{sbpPrice}/MWh | SSP £{sspPrice}/MWh | Day-Ahead £{daPrice}/MWh</span>
         </div>
       </div>
 

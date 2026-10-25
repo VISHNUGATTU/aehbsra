@@ -20,7 +20,8 @@ import {
   Layers, 
   Info,
   Calendar,
-  Flame
+  Flame,
+  Download
 } from 'lucide-react';
 import MetricCard from './MetricCard';
 
@@ -68,6 +69,34 @@ export default function DayAheadView({
       actualResidual
     };
   });
+
+  const handleExportCSV = () => {
+    if (!chartData || chartData.length === 0) return;
+    const headers = ['Timestamp', 'Period', 'Actual_Wind_MW', 'DayAhead_Forecast_MW', 'Forecast_Error_MW', 'Residual_Thermal_Needed_MW'];
+    if (showIntraday) headers.push('Intraday_Forecast_MW');
+
+    const rows = chartData.map(d => {
+      const row = [
+        `"${d.timestamp}"`,
+        d.settlementPeriod ? `SP_${d.settlementPeriod}` : `"${d.timeFormatted}"`,
+        d.actual ?? '',
+        d.forecastDA ?? '',
+        d.error ?? '',
+        d.residualThermal ?? ''
+      ];
+      if (showIntraday) row.push(d.forecastIntraday ?? '');
+      return row.join(',');
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `vortex_day_ahead_${startDate}_${endDate}_gate${gateHour}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -155,6 +184,30 @@ export default function DayAheadView({
                 <option value="half_hourly">Half-Hourly (SP 1–48 Settlement)</option>
               </select>
             </div>
+
+            {/* Export CSV Button */}
+            <button
+              id="btn-export-csv"
+              onClick={handleExportCSV}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 12px',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.3)',
+                color: 'var(--accent-cyan)',
+                fontSize: '12.5px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              title="Download currently filtered time series as CSV"
+            >
+              <Download size={14} />
+              <span>Export CSV</span>
+            </button>
 
           </div>
         </div>

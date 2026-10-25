@@ -2,7 +2,7 @@
  * API Service Client for UK Energy Utility Day-Ahead Forecasting API
  */
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export async function fetchHealth() {
   const resp = await fetch(`${API_BASE}/health`);
@@ -49,6 +49,13 @@ export async function fetchRampAnalysis(gateHour = 11, startDate = '2026-01-01',
   const query = new URLSearchParams({ gateHour, startDate, endDate });
   const resp = await fetch(`${API_BASE}/ramp-analysis?${query}`);
   if (!resp.ok) throw new Error('Failed to fetch ramp analysis');
+  return resp.json();
+}
+
+export async function fetchLeadTimeComparison(startDate = '2026-01-01', endDate = '2026-01-31') {
+  const query = new URLSearchParams({ startDate, endDate });
+  const resp = await fetch(`${API_BASE}/lead-time-comparison?${query}`);
+  if (!resp.ok) throw new Error('Failed to fetch lead-time comparison');
   return resp.json();
 }
 
