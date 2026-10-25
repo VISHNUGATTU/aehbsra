@@ -5,7 +5,9 @@ import {
   BarChart3, 
   ShieldCheck, 
   Presentation, 
-  Code2
+  Code2,
+  Headphones,
+  Download
 } from 'lucide-react';
 
 export default function Navbar({
@@ -76,6 +78,30 @@ export default function Navbar({
             </div>
 
             {/* Presentation Buttons */}
+            <a 
+              id="btn-voiceover"
+              href="/vortex_demo_voiceover.mp3"
+              download="vortex_demo_voiceover.mp3"
+              className="btn-secondary"
+              style={{ 
+                fontSize: '12.5px', 
+                padding: '7px 14px',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                background: 'var(--green-soft)',
+                borderColor: 'var(--green-border)',
+                color: 'var(--green-dark)',
+                fontWeight: 600
+              }}
+              title="Download English Studio Male Voiceover MP3 (Ryan Neural - UK Specialist)"
+            >
+              <Headphones size={15} />
+              <span>Voiceover (MP3)</span>
+              <Download size={13} style={{ opacity: 0.8 }} />
+            </a>
+
             <button 
               id="btn-client-pitch"
               onClick={onOpenPitch}

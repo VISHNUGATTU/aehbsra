@@ -101,10 +101,12 @@ project/
 │   ├── requirements.txt             # Python dependencies
 │   └── run_backend.py               # Standalone runner script
 ├── docs/
-│   └── VIDEO_DEMO_SCRIPT.md         # 3 to 4-minute presentation script with on-screen clicks
+│   ├── VIDEO_DEMO_SCRIPT.md         # 3 to 4-minute presentation script with on-screen clicks
+│   └── vortex_demo_voiceover.mp3    # Studio British male voiceover audio (1.79 MB MP3)
 ├── frontend/
 │   ├── public/
-│   │   └── favicon.svg              # Cyan energy bolt branding
+│   │   ├── favicon.svg              # Cyan energy bolt branding
+│   │   └── vortex_demo_voiceover.mp3# Downloadable voiceover audio file
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Navbar.jsx           # Global navigation, live pulse badge & modal triggers
@@ -112,8 +114,8 @@ project/
 │   │   │   ├── DayAheadView.jsx     # Workspace: gate selector, actuals vs forecast, residual demand
 │   │   │   ├── AccuracyLabView.jsx  # Accuracy Lab: MAE, RMSE, WAPE, Quantiles (P10-P90), Histograms
 │   │   │   ├── ProcurementSimulator.jsx # Risk buffer & thermal procurement cashout simulator
-│   │   │   ├── ClientPitchModal.jsx # Built-in 5-slide Executive Presentation Deck
-│   │   │   └── ArchitectureModal.jsx# Built-in Technical Lead Review Walkthrough
+│   │   │   ├── ClientPitchModal.jsx # Built-in 5-slide Executive Presentation Deck with audio player
+│   │   │   └── ArchitectureModal.jsx# Built-in Technical Lead Review Walkthrough with audio player
 │   │   ├── services/
 │   │   │   └── api.js               # API client service
 │   │   ├── App.jsx                  # Main application state orchestration
@@ -126,6 +128,7 @@ project/
 │   ├── ingest_elexon_data.py        # Standalone data extraction script for Elexon BMRS
 │   ├── test_metrics.py              # CLI testing script for quantitative metrics
 │   ├── ping_service.py              # Standalone keep-alive health ping script
+│   ├── generate_voiceover.py        # Edge-TTS studio neural voiceover generation script
 │   └── run_tests.py                 # Automated pytest test suite runner
 ├── Dockerfile                       # Root unified container for single-dyno deployment
 ├── docker-compose.yml               # Multi-container 1-command startup

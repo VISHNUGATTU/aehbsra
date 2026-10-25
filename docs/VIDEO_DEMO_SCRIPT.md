@@ -2,7 +2,11 @@
 
 > **Total Video Duration:** 3 to 4 Minutes  
 > **Format:** Spoken script with exact on-screen clicks and actions inside `(parentheses)`.  
-> **Target Audience:** Energy Utility Commercial Director, Procurement Desk & Technical Reviewers.  
+> **Voiceover Included:** A studio-grade British English male narration (`en-GB-RyanNeural` - executive UK energy specialist) has been generated and is available for instant download and browser playback.  
+> **Audio Download Locations:**  
+> - **Local File:** [`docs/vortex_demo_voiceover.mp3`](vortex_demo_voiceover.mp3) (1.79 MB)  
+> - **In-App Download:** Click the green **"Voiceover (MP3)"** button in the dashboard navbar or play it directly inside the *Client Pitch* / *Tech Lead Review* modals!  
+> **Regenerate Audio Script:** `python scripts/generate_voiceover.py`  
 > **Preparation:** Open `http://localhost:5173` (or live URL) in full screen. Have terminal ready in background with `python scripts/run_tests.py`.
 
 ---

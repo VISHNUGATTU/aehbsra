@@ -9,7 +9,9 @@ import {
   Zap, 
   CheckCircle2,
   AlertTriangle,
-  Award
+  Award,
+  Headphones,
+  Download
 } from 'lucide-react';
 
 export default function ClientPitchModal({ isOpen, onClose }) {
@@ -284,6 +286,39 @@ export default function ClientPitchModal({ isOpen, onClose }) {
           >
             <X size={18} />
           </button>
+        </div>
+
+        {/* Studio Voiceover Audio Bar */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          background: 'var(--bg-sunken)',
+          border: '1px solid var(--border-subtle)',
+          padding: '8px 16px',
+          borderRadius: '10px',
+          marginBottom: '20px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Headphones size={15} color="var(--blue)" />
+            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-main)' }}>
+              Studio Male Narration (Ryan Neural - UK Energy Specialist):
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <audio controls src="/vortex_demo_voiceover.mp3" style={{ height: '28px', maxWidth: '240px' }} />
+            <a 
+              href="/vortex_demo_voiceover.mp3" 
+              download="vortex_demo_voiceover.mp3"
+              className="btn-secondary"
+              style={{ fontSize: '11px', padding: '4px 10px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}
+            >
+              <Download size={12} />
+              Download MP3
+            </a>
+          </div>
         </div>
 
         {/* Slide Body */}
