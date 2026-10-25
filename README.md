@@ -74,6 +74,9 @@ $$\text{Residual Thermal Procurement Needed}(t) = \text{Consumer Demand}(t) - \t
 
 ```
 project/
+├── .github/
+│   └── workflows/
+│       └── keep_alive.yml           # 24/7 Keep-Alive Cron workflow (pings service every 10 mins)
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
@@ -83,6 +86,7 @@ project/
 │   │   ├── day_ahead_engine.py      # Day-Ahead Gate Closure matching logic (09:00, 11:00, 17:00 D-1)
 │   │   ├── metrics_engine.py        # Quantitative analytics: MAE, RMSE, WAPE, Bias, Quantiles
 │   │   ├── simulator_engine.py      # Thermal procurement decision & cashout hedge simulator
+│   │   ├── keep_alive.py            # Async background ping daemon to prevent Render spin-down
 │   │   └── api/
 │   │       ├── __init__.py
 │   │       └── routes.py            # REST route handlers (/health, /overview, /timeseries, etc.)
@@ -96,6 +100,8 @@ project/
 │   ├── Dockerfile                   # Python backend container
 │   ├── requirements.txt             # Python dependencies
 │   └── run_backend.py               # Standalone runner script
+├── docs/
+│   └── VIDEO_DEMO_SCRIPT.md         # 3 to 4-minute presentation script with on-screen clicks
 ├── frontend/
 │   ├── public/
 │   │   └── favicon.svg              # Cyan energy bolt branding
@@ -112,17 +118,19 @@ project/
 │   │   │   └── api.js               # API client service
 │   │   ├── App.jsx                  # Main application state orchestration
 │   │   ├── main.jsx                 # React root mount
-│   │   └── index.css                # Dark Bloomberg-energy glassmorphic design system
+│   │   └── index.css                # Professional light theme with strict 5-color palette (Blue, Green, Red, Yellow, Orange)
 │   ├── Dockerfile                   # Multi-stage Vite build + Nginx container
 │   ├── package.json
 │   └── vite.config.js               # Vite config with backend proxy
 ├── scripts/
 │   ├── ingest_elexon_data.py        # Standalone data extraction script for Elexon BMRS
 │   ├── test_metrics.py              # CLI testing script for quantitative metrics
+│   ├── ping_service.py              # Standalone keep-alive health ping script
 │   └── run_tests.py                 # Automated pytest test suite runner
 ├── Dockerfile                       # Root unified container for single-dyno deployment
 ├── docker-compose.yml               # Multi-container 1-command startup
 ├── Procfile                         # Heroku deployment command
+├── render.yaml                      # Render Infrastructure as Code specification
 ├── runtime.txt                      # Python runtime version (3.12.9)
 ├── vercel.json                      # Vercel deployment configuration
 ├── .gitignore
@@ -175,6 +183,21 @@ python scripts/run_tests.py
 pytest backend/tests/test_backend.py -v
 ```
 All **8 automated unit and integration tests** will execute and pass in ~6 seconds.
+
+---
+
+### Option D: 24/7 Keep-Alive Cron Setup (Zero Cold-Boots)
+
+To ensure the cloud-hosted backend stays 100% active and eliminates free-tier cold boot delays, VORTEX includes triple-layer high-availability cron infrastructure:
+
+1. **GitHub Actions Scheduled Cron:**
+   `.github/workflows/keep_alive.yml` automatically triggers every 10 minutes (`*/10 * * * *`) to ping the backend health endpoint.
+2. **Internal FastAPI Lifespan Ping Daemon:**
+   `backend/app/keep_alive.py` runs a background task within the FastAPI event loop, sending warm-up pings every 8 minutes.
+3. **On-Demand Keep-Alive Script:**
+   ```bash
+   python scripts/ping_service.py https://vortex-power.onrender.com
+   ```
 
 ---
 
@@ -240,9 +263,12 @@ All core market calculations, gate closure matching logic, and architectural des
 
 ---
 
-## 9. 10-Minute Video Demo Script & Walkthrough
+## 9. Video Demo Scripts & Walkthrough
 
-Below is the complete transcript and screen-by-screen guide for recording the unlisted YouTube video submission:
+> **Looking for a rapid recording script?**  
+> We have prepared an optimized, high-impact **3 to 4-minute word-for-word demo script with exact on-screen click cues in parentheses** in [`docs/VIDEO_DEMO_SCRIPT.md`](docs/VIDEO_DEMO_SCRIPT.md).
+
+Below is the extended dual-part agenda for recording the unlisted YouTube video submission (maximum 10 minutes total):
 
 ### Part 1: Client Presentation Pitch (0:00 – 5:00)
 - **0:00 – 1:00 | Problem & Business Setting:** Introduce yourself to the UK energy utility's commercial procurement team. Explain why Day-Ahead power purchasing is fraught with volume risk when relying blindly on weather forecasts before 11:00 AM auction gate closure.
