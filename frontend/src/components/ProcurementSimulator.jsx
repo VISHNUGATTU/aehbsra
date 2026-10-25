@@ -69,7 +69,7 @@ export default function ProcurementSimulator({ gateHour }) {
 
   useEffect(() => {
     runSimulation();
-  }, [targetDate, strategy, gateHour]);
+  }, [targetDate, strategy, gateHour, customBufferMW, daPrice, sbpPrice, sspPrice]);
 
   const financial = simResult?.financialComparison || {};
   const risk = simResult?.riskComparison || {};
