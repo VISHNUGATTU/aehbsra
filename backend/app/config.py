@@ -13,14 +13,19 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 FUELHH_CACHE_FILE = DATA_DIR / "fuelhh_wind_jan2026.json"
 WINDFOR_CACHE_FILE = DATA_DIR / "windfor_jan2026.json"
 
-# Elexon BMRS API Endpoints
-ELEXON_FUELHH_URL = (
-    "https://data.elexon.co.uk/bmrs/api/v1/datasets/fuelhh/stream?"
+# Elexon BMRS API Endpoints and Credentials
+ELEXON_BASE_URL = os.getenv("ELEXON_BASE_URL", "https://data.elexon.co.uk/bmrs/api/v1")
+ELEXON_API_KEY = os.getenv("ELEXON_API_KEY", "")
+
+ELEXON_FUELHH_URL = os.getenv(
+    "ELEXON_FUELHH_URL",
+    f"{ELEXON_BASE_URL}/datasets/fuelhh/stream?"
     "publishDateTimeFrom=2025-12-31T23:00:00Z&"
     "publishDateTimeTo=2026-02-01T01:00:00Z"
 )
-ELEXON_WINDFOR_URL = (
-    "https://data.elexon.co.uk/bmrs/api/v1/datasets/windfor/stream?"
+ELEXON_WINDFOR_URL = os.getenv(
+    "ELEXON_WINDFOR_URL",
+    f"{ELEXON_BASE_URL}/datasets/windfor/stream?"
     "publishDateTimeFrom=2025-12-30T00:00:00Z&"
     "publishDateTimeTo=2026-02-01T23:59:59Z"
 )
